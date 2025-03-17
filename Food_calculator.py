@@ -1,86 +1,72 @@
+
 import streamlit as st
 import requests
 import json
-import matplotlib.pyplot as plt
+from datetime import datetime
 
-# URL del file JSON su GitHub (versione RAW)
-GITHUB_JSON_URL = "https://raw.githubusercontent.com/FrancDeps/food_nutrition_calculator/main/nutritional_data.json"
+# Configura GitHub
+GITHUB_TOKEN = "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"  # 🔴 Sostituiscilo con il tuo token GitHub
+GITHUB_REPO = "FrancDeps/food_nutrition_calculator"
+GITHUB_FOLDER = "daily_logs"  # Cartella dove salvare i file
+TODAY_DATE = datetime.today().strftime("%Y-%m-%d")  # Genera il nome del file (YYYY-MM-DD.json)
+GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json"
+GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
-# Funzione per scaricare il database da GitHub
-@st.cache_data
-def carica_dati():
-    try:
-        response = requests.get(GITHUB_JSON_URL)
-        response.raise_for_status()  # Controlla errori HTTP
-        return response.json()
-    except requests.exceptions.RequestException as e:
-        st.error(f"Errore nel caricamento del database: {e}")
-        return {}
+# Funzione per scaricare i dati giornalieri da GitHub
+def carica_dati_giornalieri():
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+    response = requests.get(GITHUB_API_URL, headers=headers)
 
-# Carica il database
-DATABASE_ALIMENTI = carica_dati()
+    if response.status_code == 200:
+        data = response.json()
+        return json.loads(requests.get(data["download_url"]).text), data["sha"]
+    else:
+        return {}, None  # Se il file non esiste, restituisce un dizionario vuoto
 
-# Inizializza Session State per salvare gli alimenti selezionati
-if "storico_alimenti" not in st.session_state:
-    st.session_state.storico_alimenti = {}
+# Funzione per aggiornare i dati giornalieri su GitHub
+def aggiorna_dati_giornalieri(nuovi_dati, sha):
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+    dati_json = json.dumps(nuovi_dati, indent=4)
+    payload = {
+        "message": f"Aggiornamento dati giornalieri {TODAY_DATE}",
+        "content": json.dumps(dati_json).encode("utf-8").decode("unicode_escape"),
+        "sha": sha
+    }
+    response = requests.put(GITHUB_API_URL, headers=headers, json=payload)
 
-st.title("🍏 Nutritional Tracker")
+    if response.status_code in [200, 201]:
+        st.success("✅ File aggiornato con successo su GitHub!")
+    else:
+        st.error(f"Errore nell'aggiornamento: {response.text}")
+
+# Carica i dati giornalieri
+dati_giornalieri, sha = carica_dati_giornalieri()
+
+# Interfaccia Streamlit
+st.title("🍏 Tracker Nutrizionale Giornaliero")
 
 alimento = st.text_input("Inserisci il nome dell'alimento:")
 quantita = st.number_input("Inserisci la quantità in grammi:", min_value=1, value=100)
 
 if st.button("Aggiungi alimento"):
-    alimento = alimento.lower()
-    if alimento in DATABASE_ALIMENTI:
-        valori_base = DATABASE_ALIMENTI[alimento]
-        proporzione = quantita / 100
-        
-        valori = {
-            "calorie": valori_base["calorie"] * proporzione,
-            "proteine": valori_base["proteine"] * proporzione,
-            "carboidrati": valori_base["carboidrati"] * proporzione,
-            "grassi": valori_base["grassi"] * proporzione,
-            "quantita": quantita
-        }
-        
-        st.session_state.storico_alimenti[alimento] = valori
-        st.success(f"Aggiunto {quantita}g di {alimento}")
+    if alimento:
+        alimento = alimento.lower()
+        if alimento in dati_giornalieri:
+            dati_giornalieri[alimento]["quantita"] += quantita
+        else:
+            dati_giornalieri[alimento] = {"quantita": quantita}
+
+        # Aggiorna il file su GitHub
+        aggiorna_dati_giornalieri(dati_giornalieri, sha)
     else:
-        st.error("❌ Alimento non trovato nel database.")
+        st.error("⚠️ Inserisci un nome valido per l'alimento.")
 
-# Calcola i totali
-tot_calorie = sum(v["calorie"] for v in st.session_state.storico_alimenti.values())
-tot_proteine = sum(v["proteine"] for v in st.session_state.storico_alimenti.values())
-tot_carboidrati = sum(v["carboidrati"] for v in st.session_state.storico_alimenti.values())
-tot_grassi = sum(v["grassi"] for v in st.session_state.storico_alimenti.values())
-
-# Mostra i totali
-st.header("📊 Totale valori nutrizionali")
-st.write(f"**Totale Calorie:** {tot_calorie:.2f} kcal")
-st.write(f"**Totale Proteine:** {tot_proteine:.2f} g")
-st.write(f"**Totale Carboidrati:** {tot_carboidrati:.2f} g")
-st.write(f"**Totale Grassi:** {tot_grassi:.2f} g")
-
-# Grafico a torta
-st.header("🥧 Distribuzione Macronutrienti")
-fig, ax = plt.subplots(figsize=(6, 6))
-labels = ["Proteine", "Carboidrati", "Grassi"]
-values = [tot_proteine, tot_carboidrati, tot_grassi]
-
-# 🛑 Controllo se tutti i valori sono zero o NaN
-if sum(values) > 0 and all(v >= 0 for v in values):
-    ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, colors=["blue", "orange", "red"])
-    st.pyplot(fig)
+# Mostra i dati della giornata
+st.header(f"📅 Dati nutrizionali del {TODAY_DATE}")
+if dati_giornalieri:
+    for alimento, info in dati_giornalieri.items():
+        st.write(f"**{alimento.capitalize()}**: {info['quantita']}g")
 else:
-    st.warning("⚠️ Aggiungi almeno un alimento per visualizzare il grafico.")
+    st.info("Nessun alimento registrato oggi.")
 
-# Confronto con benchmark calorico
-benchmark_calorie = 2000
-surplus_deficit = tot_calorie - benchmark_calorie
-st.header("⚖️ Confronto con benchmark calorico")
-if surplus_deficit > 0:
-    st.warning(f"🔥 Sei in surplus calorico di {surplus_deficit:.2f} kcal.")
-elif surplus_deficit < 0:
-    st.info(f"🥗 Sei in deficit calorico di {abs(surplus_deficit):.2f} kcal.")
-else:
-    st.success("✅ Sei esattamente a 2000 kcal.")
+
