@@ -14,7 +14,7 @@ GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_F
 
 # Funzione per scaricare i dati giornalieri da GitHub
 def carica_dati_giornalieri():
-    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
     response = requests.get(GITHUB_API_URL, headers=headers)
 
     if response.status_code == 200:
