@@ -98,4 +98,5 @@ elif surplus_deficit < 0:
     st.info(f"Sei in deficit calorico di {abs(surplus_deficit):.2f} kcal.")
 else:
     st.success("Sei esattamente a 2000 kcal.")
+
     
