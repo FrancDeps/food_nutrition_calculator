@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import json
-
+import matplotlib.pyplot as plt
 
 # URL del file JSON su GitHub (versione RAW)
 GITHUB_JSON_URL = "https://raw.githubusercontent.com/FrancDeps/food_nutrition_calculator/main/nutritional_data.json"
