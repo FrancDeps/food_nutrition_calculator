@@ -66,8 +66,13 @@ st.header("🥧 Distribuzione Macronutrienti")
 fig, ax = plt.subplots(figsize=(6, 6))
 labels = ["Proteine", "Carboidrati", "Grassi"]
 values = [tot_proteine, tot_carboidrati, tot_grassi]
-ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, colors=["blue", "orange", "red"])
-st.pyplot(fig)
+
+# 🛑 Controllo se tutti i valori sono zero o NaN
+if sum(values) > 0 and all(v >= 0 for v in values):
+    ax.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, colors=["blue", "orange", "red"])
+    st.pyplot(fig)
+else:
+    st.warning("⚠️ Aggiungi almeno un alimento per visualizzare il grafico.")
 
 # Confronto con benchmark calorico
 benchmark_calorie = 2000
