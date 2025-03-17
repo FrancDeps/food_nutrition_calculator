@@ -1,100 +1,101 @@
-# food_nutrition_calculator
+import json
+import streamlit as st
+import matplotlib.pyplot as plt
 
-import streamlit as st  # Libreria per l'interfaccia grafica
-import pandas as pd  # Libreria per la gestione dei dati
-import matplotlib.pyplot as plt  # Libreria per i grafici
-import json  # Libreria per il salvataggio dei dati
-import requests  # Libreria per API request
+# File di input (database alimenti pre-esistente)
+file_input = "nutritional_data.json"
+# File di output (alimenti cercati e salvati dall'utente)
+file_output = "searched_foods.json"
 
-# File JSON per salvare i dati
-DATA_FILE = "nutritional_data.json"
-
-# Funzione per caricare dati salvati
-
-def carica_dati():
+# Funzione per caricare dati da un file JSON
+def carica_dati(file_path):
     try:
-        with open(DATA_FILE, "r") as file:
+        with open(file_path, "r") as file:
             return json.load(file)
-    except FileNotFoundError:
+    except (FileNotFoundError, json.JSONDecodeError):
         return {}
 
-# Funzione per salvare dati
-
-def salva_dati(dati):
-    with open(DATA_FILE, "w") as file:
+# Funzione per salvare dati in un file JSON
+def salva_dati(file_path, dati):
+    with open(file_path, "w") as file:
         json.dump(dati, file, indent=4)
 
-# Caricamento del database alimentare locale
-data = carica_dati()
+# Carica i dati dal file di input (database originale)
+dati_nutrizionali = carica_dati(file_input)
+# Carica i dati dal file di output (storico degli alimenti cercati)
+storico_alimenti = carica_dati(file_output)
 
-# Funzione per ottenere dati nutrizionali da API
+# Inizializza i valori totali
+tot_calorie = 0
+tot_proteine = 0
+tot_carboidrati = 0
+tot_grassi = 0
 
-def ottieni_dati_alimento(alimento):
-    API_URL = f"https://api.edamam.com/api/food-database/v2/parser?ingr={alimento}&app_id=YOUR_APP_ID&app_key=YOUR_APP_KEY"
-    response = requests.get(API_URL)
-    if response.status_code == 200:
-        risultato = response.json()
-        if "parsed" in risultato and len(risultato["parsed"]) > 0:
-            nutrienti = risultato["parsed"][0]["food"]["nutrients"]
-            return {
-                "calorie": nutrienti.get("ENERC_KCAL", 0),
-                "proteine": nutrienti.get("PROCNT", 0),
-                "carboidrati": nutrienti.get("CHOCDF", 0),
-                "grassi": nutrienti.get("FAT", 0)
-            }
-    return None
-
-# Interfaccia utente
-st.title("🍽️ Calcolatore Nutrizionale con API e Salvataggio Dati")
-
-alimento = st.text_input("Inserisci un alimento")
-
-if st.button("Aggiungi al database"):
-    if alimento:
-        dati_nutrizionali = ottieni_dati_alimento(alimento)
-        if dati_nutrizionali:
-            data[alimento] = dati_nutrizionali
-            salva_dati(data)
-            st.success(f"{alimento.capitalize()} aggiunto con successo!")
-        else:
-            st.error("Dati non disponibili per questo alimento.")
-    else:
-        st.error("Inserisci un alimento valido.")
-
-# Selezione multipla di alimenti
-alimenti_scelti = st.multiselect("Seleziona gli alimenti", list(data.keys()))
-
-dati_risultati = []
-tot_calorie, tot_proteine, tot_carboidrati, tot_grassi = 0, 0, 0, 0
-
-for alimento in alimenti_scelti:
-    grammi = st.number_input(f"Inserisci la quantità (g) per {alimento}", min_value=1, value=100, key=alimento)
-    if alimento in data:
-        calorie = (data[alimento]["calorie"] / 100) * grammi
-        proteine = (data[alimento]["proteine"] / 100) * grammi
-        carboidrati = (data[alimento]["carboidrati"] / 100) * grammi
-        grassi = (data[alimento]["grassi"] / 100) * grammi
+# Funzione per ottenere i valori nutrizionali proporzionati alla quantità
+def ottieni_nutrienti(alimento, quantita, dati_originali, dati_storico, file_output):
+    alimento = alimento.lower()
+    if alimento in dati_originali:
+        valori_base = dati_originali[alimento]
+        proporzione = quantita / 100  # Per adattare ai grammi specificati
         
-        tot_calorie += calorie
-        tot_proteine += proteine
-        tot_carboidrati += carboidrati
-        tot_grassi += grassi
-        dati_risultati.append([alimento, grammi, calorie, proteine, carboidrati, grassi])
+        valori = {
+            "calorie": valori_base["calorie"] * proporzione,
+            "proteine": valori_base["proteine"] * proporzione,
+            "carboidrati": valori_base["carboidrati"] * proporzione,
+            "grassi": valori_base["grassi"] * proporzione,
+            "quantita": quantita
+        }
+        
+        dati_storico[alimento] = valori  # Salva nel file di storico
+        salva_dati(file_output, dati_storico)
+        return valori
+    else:
+        return None
 
-if dati_risultati:
-    df = pd.DataFrame(dati_risultati, columns=["Alimento", "Grammi", "Calorie", "Proteine", "Carboidrati", "Grassi"])
-    st.write("### 📊 Valori Nutrizionali per i pasti selezionati:")
-    st.dataframe(df.style.format({"Calorie": "{:.2f}", "Proteine": "{:.2f}", "Carboidrati": "{:.2f}", "Grassi": "{:.2f}"}))
+# Streamlit UI
+st.title("Nutritional Tracker")
+
+alimento = st.text_input("Inserisci il nome dell'alimento:")
+quantita = st.number_input("Inserisci la quantità in grammi:", min_value=1, value=100)
+
+if st.button("Aggiungi alimento"):
+    if alimento:
+        valori = ottieni_nutrienti(alimento, quantita, dati_nutrizionali, storico_alimenti, file_output)
+        if valori:
+            st.success(f"Aggiunto {quantita}g di {alimento}")
+        else:
+            st.error("Alimento non trovato nel database.")
+
+# Calcola i totali
+for alimento, valori in storico_alimenti.items():
+    tot_calorie += valori["calorie"]
+    tot_proteine += valori["proteine"]
+    tot_carboidrati += valori["carboidrati"]
+    tot_grassi += valori["grassi"]
+
+# Mostra i totali
+st.header("Totale valori nutrizionali")
+st.write(f"**Totale Calorie:** {tot_calorie:.2f} kcal")
+st.write(f"**Totale Proteine:** {tot_proteine:.2f} g")
+st.write(f"**Totale Carboidrati:** {tot_carboidrati:.2f} g")
+st.write(f"**Totale Grassi:** {tot_grassi:.2f} g")
+
+# Grafico a torta con Streamlit
+st.header("Distribuzione Macronutrienti")
+st.pyplot(plt.figure(figsize=(6, 6)))
+labels = ["Proteine", "Carboidrati", "Grassi"]
+values = [tot_proteine, tot_carboidrati, tot_grassi]
+plt.pie(values, labels=labels, autopct='%1.1f%%', startangle=90, colors=["blue", "orange", "red"])
+st.pyplot()
+
+# Confronto con benchmark calorico
+benchmark_calorie = 2000
+surplus_deficit = tot_calorie - benchmark_calorie
+st.header("Confronto con benchmark calorico")
+if surplus_deficit > 0:
+    st.warning(f"Sei in surplus calorico di {surplus_deficit:.2f} kcal.")
+elif surplus_deficit < 0:
+    st.info(f"Sei in deficit calorico di {abs(surplus_deficit):.2f} kcal.")
+else:
+    st.success("Sei esattamente a 2000 kcal.")
     
-    st.write("### 🔹 Totale della giornata:")
-    st.write(f"- **Calorie:** {tot_calorie:.2f} kcal")
-    st.write(f"- **Proteine:** {tot_proteine:.2f} g")
-    st.write(f"- **Carboidrati:** {tot_carboidrati:.2f} g")
-    st.write(f"- **Grassi:** {tot_grassi:.2f} g")
-    
-    fig, ax = plt.subplots()
-    labels = ["Proteine", "Carboidrati", "Grassi"]
-    valori = [tot_proteine, tot_carboidrati, tot_grassi]
-    ax.pie(valori, labels=labels, autopct='%1.1f%%', startangle=90, colors=['#ff9999','#66b3ff','#99ff99'])
-    ax.set_title("Distribuzione Macronutrienti")
-    st.pyplot(fig)
