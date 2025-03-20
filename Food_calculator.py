@@ -20,7 +20,12 @@ GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_F
 def load_food_database():
     try:
         with open("nutritional_data.json", "r", encoding="utf-8") as file:
-            return json.load(file)  # Load food database
+            data = json.load(file)
+            if isinstance(data, dict):
+                return data  # ✅ Ensure it's a dictionary
+            else:
+                st.error("❌ Error: `nutritional_data.json` format is incorrect.")
+                return {}
     except FileNotFoundError:
         st.error("❌ Error: `nutritional_data.json` not found. Ensure the file is in the correct directory.")
         return {}
@@ -64,9 +69,11 @@ st.title("🍏 Daily Nutrition Tracker")
 
 # 📌 Sidebar: Verify food database
 st.sidebar.header("📋 Available Food Items")
-st.sidebar.write("Select a food from the database or enter manually.")
 if food_database:
-    st.sidebar.write(", ".join(list(food_database.keys())[:50]))  # Display first 50 food items
+    available_foods = sorted(food_database.keys())
+    st.sidebar.write(", ".join(available_foods[:50]))  # ✅ Show first 50 items
+else:
+    st.sidebar.warning("⚠️ No food data loaded. Check `nutritional_data.json`.")
 
 # 📌 Select gender and activity level
 gender = st.radio("Select your gender:", ["Male", "Female"])
@@ -76,8 +83,8 @@ activity_level = st.selectbox("Select your activity level:", ["Sedentary", "Mode
 goal = st.selectbox("What is your goal?", ["Weight Loss", "Muscle Gain", "Endurance Training", "Ketogenic Diet"])
 
 # 📌 Food input (with dropdown selection)
-food_item = st.text_input("Enter food name or choose from the list:").strip().lower()
-food_item_selected = st.selectbox("Select food from database (optional)", [""] + sorted(food_database.keys()))
+food_item = st.text_input("Enter food name (e.g., rice, apple, chicken):").strip().lower()
+food_item_selected = st.selectbox("Select food from database (optional)", [""] + available_foods)
 
 # Use dropdown selection if chosen
 if food_item_selected:
@@ -159,22 +166,3 @@ for macro, percent in macronutrient_percentages.items():
         st.warning(f"⚠️ **{macro}** intake **{percent}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
     else:
         st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
