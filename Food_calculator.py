@@ -15,15 +15,19 @@ TODAY_DATE = datetime.today().strftime("%Y-%m-%d")
 GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
-# Mockup Food Database with Macronutrients per 100g
-food_database = {
-    "apple": {"Carbohydrates": 14, "Proteins": 0.3, "Fats": 0.2},
-    "chicken": {"Carbohydrates": 0, "Proteins": 27, "Fats": 3.5},
-    "rice": {"Carbohydrates": 28, "Proteins": 2.7, "Fats": 0.3},
-    "salmon": {"Carbohydrates": 0, "Proteins": 25, "Fats": 13},
-}
+# Load Food Database from JSON File
+@st.cache_data
+def load_food_database():
+    try:
+        with open("nutritional_data.json", "r") as file:
+            return json.load(file)  # Load food database
+    except FileNotFoundError:
+        st.error("❌ Error: `nutritional_data.json` not found. Make sure the file is in the project folder.")
+        return {}
 
-# Load daily data
+food_database = load_food_database()
+
+# Load daily data from GitHub
 def load_daily_data():
     headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
     response = requests.get(GITHUB_API_URL, headers=headers)
@@ -35,7 +39,7 @@ def load_daily_data():
     else:
         return {}, None  # Returns an empty dictionary if the file doesn't exist
 
-# Update daily data
+# Update daily data on GitHub
 def update_daily_data(new_data, sha):
     headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
     json_data = json.dumps(new_data, indent=4)
@@ -66,11 +70,11 @@ activity_level = st.selectbox("Select your activity level:", ["Sedentary", "Mode
 goal = st.selectbox("What is your goal?", ["Weight Loss", "Muscle Gain", "Endurance Training", "Ketogenic Diet"])
 
 # 📌 Input to add food item
-food_item = st.text_input("Enter food name:")
+food_item = st.text_input("Enter food name (e.g., rice, apple, chicken):").lower()
 quantity = st.number_input("Enter quantity in grams:", min_value=1, value=100)
 
 if st.button("Add Food"):
-    if food_item.lower() in food_database:
+    if food_item in food_database:
         if food_item in st.session_state.daily_data:
             st.session_state.daily_data[food_item]["quantity"] += quantity
         else:
@@ -79,9 +83,9 @@ if st.button("Add Food"):
         update_daily_data(st.session_state.daily_data, st.session_state.sha)
         st.rerun()
     else:
-        st.error("⚠️ Food not found in database.")
+        st.error("⚠️ Food not found in the database. Please check the spelling.")
 
-# 📊 Display daily food log with a remove button
+# 📊 Display daily food log with remove button
 st.header(f"📅 Daily Nutrition Data for {TODAY_DATE}")
 
 if st.session_state.daily_data:
@@ -108,18 +112,20 @@ for food, info in st.session_state.daily_data.items():
 
 # Normalize to Percentage
 total_macros = sum(macronutrient_totals.values())
+
 if total_macros > 0:
     macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
+    
+    # 📊 Interactive Pie Chart of Macronutrient Distribution
+    st.header("📊 Macronutrient Distribution")
+    
+    fig, ax = plt.subplots()
+    ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%', startangle=90)
+    ax.axis("equal")
+    st.pyplot(fig)
+
 else:
-    macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
-
-# 📊 Interactive Pie Chart of Macronutrient Distribution
-st.header("📊 Macronutrient Distribution")
-
-fig, ax = plt.subplots()
-ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%', startangle=90)
-ax.axis("equal")
-st.pyplot(fig)
+    st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
 
 # 📌 Compare macronutrient intake with target range based on goal
 st.header(f"📈 Macronutrient Comparison for **{goal}**")
@@ -139,6 +145,7 @@ for macro, percent in macronutrient_percentages.items():
         st.warning(f"⚠️ **{macro}** intake **{percent}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
     else:
         st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
+
 
 
 
