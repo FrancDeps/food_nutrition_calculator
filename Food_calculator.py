@@ -7,14 +7,13 @@ from datetime import datetime
 
 # GitHub Configuration
 GITHUB_TOKEN1 = "ghp_tKJMlnBlpxtk75K"
-GITHUB_TOKEN2 = "bmWQNjJTIW40HeV1jGcrg"  # 🔴 Replace with your GitHub token
+GITHUB_TOKEN2 = "bmWQNjJTIW40HeV1jGcrg"
 GITHUB_TOKEN = GITHUB_TOKEN1 + GITHUB_TOKEN2
 GITHUB_REPO = "FrancDeps/food_nutrition_calculator"
 GITHUB_FOLDER = "daily_logs"
 TODAY_DATE = datetime.today().strftime("%Y-%m-%d")
 GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
-
 
 # Load Food Database from JSON File
 @st.cache_data
@@ -27,9 +26,7 @@ def load_food_database():
         st.error("❌ Error: `nutritional_data.json` not found. Make sure the file is in the project folder.")
         return {}
 
-
 food_database = load_food_database()
-
 
 # Load daily data from GitHub
 def load_daily_data():
@@ -42,7 +39,6 @@ def load_daily_data():
         return json.loads(decoded_content), data["sha"]
     else:
         return {}, None  # Returns an empty dictionary if the file doesn't exist
-
 
 # Update daily data on GitHub
 def update_daily_data(new_data, sha):
@@ -59,7 +55,6 @@ def update_daily_data(new_data, sha):
     response = requests.put(GITHUB_API_URL, headers=headers, json=payload)
     if response.status_code in [200, 201]:
         st.success("✅ File successfully updated on GitHub!")
-
 
 # Initialize session state
 if "daily_data" not in st.session_state:
@@ -91,7 +86,7 @@ if st.button("Add Food"):
     else:
         st.error("⚠️ Food not found in the database. Please check the spelling.")
 
-# 📊 Display daily food log with remove button
+# 📊 Display daily food log
 st.header(f"📅 Daily Nutrition Data for {TODAY_DATE}")
 
 if st.session_state.daily_data:
@@ -107,45 +102,21 @@ if st.session_state.daily_data:
 else:
     st.info("No food recorded today.")
 
-# 📊 Calculate Macronutrient Distribution
-macronutrient_totals = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
-
-for food, info in st.session_state.daily_data.items():
-    if food in food_database:
-        quantity = info["quantity"] / 100  # Convert to per 100g
-        for macro in macronutrient_totals:
-            macronutrient_totals[macro] += food_database[food][macro] * quantity
-
-# **Ensure macronutrient_percentages is always defined**
-macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
-
-# Normalize to Percentage
-total_macros = sum(macronutrient_totals.values())
-if total_macros > 0:
-    macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
-
-    # 📊 Interactive Pie Chart of Macronutrient Distribution
-    st.header("📊 Macronutrient Distribution")
-
-    fig, ax = plt.subplots()
-    ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%',
-           startangle=90)
-    ax.axis("equal")
-    st.pyplot(fig)
-
-else:
-    st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
 # 📊 Calculate Macronutrient Distribution & Total Calories
 macronutrient_totals = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
-total_calories = 0  # Initialize total calorie count
+total_calories = 0  
 
 for food, info in st.session_state.daily_data.items():
     if food in food_database:
-        quantity = info["quantity"] / 100  # Convert to per 100g
-        for macro in macronutrient_totals:
-            macronutrient_totals[macro] += food_database[food][macro] * quantity
-        total_calories += food_database[food]["calories"] * quantity
+        quantity = info["quantity"] / 100  
+        
+        # Controllo chiave calorie
+        if "calories" in food_database[food]:
+            total_calories += food_database[food]["calories"] * quantity
+        else:
+            st.warning(f"⚠️ No calorie data for {food.capitalize()}, skipped in calorie count.")
 
+# 📊 Display total calories
 st.header("🔥 Total Calories Consumed Today")
 st.subheader(f"**{total_calories:.0f} kcal**")
 
@@ -171,76 +142,12 @@ else:
 st.header("📊 Macronutrient Distribution")
 
 total_macros = sum(macronutrient_totals.values())
-macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()} if total_macros > 0 else {}
-
-if macronutrient_percentages:
+if total_macros > 0:
+    macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
+    
     fig, ax = plt.subplots()
     ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%', startangle=90)
     ax.axis("equal")
     st.pyplot(fig)
 else:
-    st.warning("⚠️ No food added yet. Please enter food items to see macronutrient 
-
-
-# 📌 Compare macronutrient intake with target range based on goal
-st.header(f"📈 Macronutrient Comparison for **{goal}**")
-
-macronutrient_ranges = {
-    "Weight Loss": {"Carbohydrates": (20, 40), "Proteins": (30, 40), "Fats": (30, 40)},
-    "Muscle Gain": {"Carbohydrates": (45, 55), "Proteins": (20, 30), "Fats": (20, 30)},
-    "Endurance Training": {"Carbohydrates": (55, 65), "Proteins": (15, 20), "Fats": (20, 25)},
-    "Ketogenic Diet": {"Carbohydrates": (5, 10), "Proteins": (20, 25), "Fats": (65, 75)}
-}
-
-for macro, percent in macronutrient_percentages.items():
-    min_range, max_range = macronutrient_ranges[goal][macro]
-    if percent < min_range:
-        st.warning(
-            f"⚠️ **{macro}** intake **{percent}%**: Too LOW compared to the target range **{min_range}-{max_range}%**.")
-    elif percent > max_range:
-        st.warning(
-            f"⚠️ **{macro}** intake **{percent}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
-    else:
-        st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
