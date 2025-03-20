@@ -212,20 +212,5 @@ if total_calories > 4000:
     }
     update_daily_data(st.session_state.daily_data, st.session_state.sha)
 
-    # Visual effect & GIF
-    st.markdown(
-        f"""
-        <div style='text-align: center; padding: 20px; border: 5px dashed red; border-radius: 20px; background-color: #fff3f3;'>
-            <h1 style='color: red; font-size: 60px; animation: blinker 1s linear infinite;'>💥 STAI SGRAVANDO FRA 💥</h1>
-            <h2 style='color: orange; font-size: 26px;'>{goal_messages.get(goal)}</h2>
-            <img src="https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif" width="400">
-        </div>
-        <style>
-            @keyframes blinker {{
-                50% {{ opacity: 0; }}
-            }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
+
 
