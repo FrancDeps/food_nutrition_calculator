@@ -2,6 +2,7 @@ import streamlit as st
 import requests
 import json
 import base64
+import matplotlib.pyplot as plt
 from datetime import datetime
 
 # Configura GitHub
@@ -20,6 +21,9 @@ calorie_reference = {
     "Donna": {"Sedentario": 1700, "Moderatamente Attivo": 2100, "Attivo": 2500}
 }
 
+# Linee guida OMS per i macronutrienti (in %)
+oms_macros = {"Carboidrati": 50, "Proteine": 20, "Grassi": 30}
+
 # Funzione per scaricare i dati giornalieri da GitHub
 def carica_dati_giornalieri():
     headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
@@ -27,17 +31,21 @@ def carica_dati_giornalieri():
 
     if response.status_code == 200:
         data = response.json()
-        return json.loads(requests.get(data["download_url"]).text), data["sha"]
+        contenuto_decodificato = base64.b64decode(data["content"]).decode("utf-8")
+        return json.loads(contenuto_decodificato), data["sha"]
     else:
         return {}, None  # Se il file non esiste, restituisce un dizionario vuoto
 
 # Funzione per aggiornare i dati giornalieri su GitHub
 def aggiorna_dati_giornalieri(nuovi_dati, sha):
-    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
-    
-    # Converti il dizionario in una stringa JSON
+    headers = {
+        "Authorization": f"Bearer {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github.v3+json"
+    }
+
+    # Converti il dizionario in JSON
     dati_json = json.dumps(nuovi_dati, indent=4)
-    
+
     # Codifica in Base64
     dati_base64 = base64.b64encode(dati_json.encode("utf-8")).decode("utf-8")
 
@@ -45,7 +53,7 @@ def aggiorna_dati_giornalieri(nuovi_dati, sha):
     payload = {
         "message": f"Aggiornamento dati giornalieri {TODAY_DATE}",
         "content": dati_base64,  # Usa il contenuto in Base64
-        "sha": sha
+        "sha": sha if sha else ""  # Se il file non esiste, lascia vuoto
     }
 
     response = requests.put(GITHUB_API_URL, headers=headers, json=payload)
@@ -53,7 +61,7 @@ def aggiorna_dati_giornalieri(nuovi_dati, sha):
     if response.status_code in [200, 201]:
         st.success("✅ File aggiornato con successo su GitHub!")
     else:
-        st.error(f"Errore nell'aggiornamento: {response.text}")
+        st.error(f"❌ Errore nell'aggiornamento: {response.status_code} - {response.text}")
 
 # Carica i dati giornalieri
 dati_giornalieri, sha = carica_dati_giornalieri()
@@ -109,6 +117,37 @@ elif bilancio < 0:
     st.warning(f"⚠️ Sei in **surplus calorico** di **{abs(bilancio)} kcal**.")
 else:
     st.success("✅ Hai raggiunto il tuo fabbisogno calorico esatto!")
+
+# 📊 Grafico a torta della distribuzione dei macronutrienti
+st.header("📊 Distribuzione dei Macronutrienti")
+
+# Simuliamo i macronutrienti consumati (questo va sostituito con i dati reali se disponibili)
+macronutrienti_consumati = {
+    "Carboidrati": 55,  # Valori d'esempio
+    "Proteine": 18,
+    "Grassi": 27
+}
+
+# Creazione del grafico a torta
+fig, ax = plt.subplots()
+ax.pie(macronutrienti_consumati.values(), labels=macronutrienti_consumati.keys(), autopct='%1.1f%%', startangle=90)
+ax.axis("equal")  # Mantiene il grafico circolare
+
+st.pyplot(fig)
+
+# 📌 Confronto con le linee guida dell'OMS
+st.header("📈 Confronto con le Linee Guida OMS")
+
+for macro, percent in macronutrienti_consumati.items():
+    diff = percent - oms_macros[macro]
+    if diff > 0:
+        st.warning(f"⚠️ Hai consumato **{abs(diff)}%** in più di **{macro}** rispetto alle linee guida OMS.")
+    elif diff < 0:
+        st.info(f"🔹 Hai consumato **{abs(diff)}%** in meno di **{macro}** rispetto alle linee guida OMS.")
+    else:
+        st.success(f"✅ Il tuo consumo di **{macro}** è perfettamente in linea con le linee guida OMS!")
+
+
 
 
 
