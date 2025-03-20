@@ -85,8 +85,13 @@ quantity = st.number_input("Enter quantity in grams:", min_value=1, value=100)
 if st.button("Add Food"):
     if food_item:
         food_item = food_item.lower()
-        daily_data[food_item] = {"quantity": daily_data.get(food_item, {"quantity": 0})["quantity"] + quantity}
+        if food_item in daily_data:
+            daily_data[food_item]["quantity"] += quantity
+        else:
+            daily_data[food_item] = {"quantity": quantity}
+
         update_daily_data(daily_data, sha)
+        st.rerun()  # Refresh the UI after adding food
     else:
         st.error("⚠️ Please enter a valid food name.")
 
@@ -97,7 +102,7 @@ if daily_data:
     for food, info in list(daily_data.items()):
         col1, col2 = st.columns([4, 1])
         with col1:
-            st.write(f"**{food.capitalize()}**: {info['quantity']}g")
+            st.write(f"**{food.capitalize()}**: {info.get('quantity', 0)}g")  # ✅ FIX APPLIED
         with col2:
             if st.button(f"❌ Remove", key=food):
                 del daily_data[food]
