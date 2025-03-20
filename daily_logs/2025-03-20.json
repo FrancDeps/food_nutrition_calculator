@@ -4,5 +4,8 @@
     },
     "beef": {
         "quantity": 200
+    },
+    "chicken": {
+        "quantity": 100
     }
 }
