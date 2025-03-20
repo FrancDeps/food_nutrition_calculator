@@ -13,5 +13,10 @@
     },
     "butter": {
         "quantity": 1000
+    },
+    "\ud83d\udd25_overlimit": {
+        "status": true,
+        "calories": 8486.5,
+        "message": "Zio\u2026 dovevi perdere peso, non sfondare il frigo! \ud83e\udd72"
     }
 }
