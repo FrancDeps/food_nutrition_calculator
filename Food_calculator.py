@@ -110,9 +110,11 @@ for food, info in st.session_state.daily_data.items():
         for macro in macronutrient_totals:
             macronutrient_totals[macro] += food_database[food][macro] * quantity
 
+# **Ensure macronutrient_percentages is always defined**
+macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
+
 # Normalize to Percentage
 total_macros = sum(macronutrient_totals.values())
-
 if total_macros > 0:
     macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
     
