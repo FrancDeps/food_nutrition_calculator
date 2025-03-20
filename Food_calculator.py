@@ -16,7 +16,7 @@ GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
 def load_food_database():
-    url = "https://raw.githubusercontent.com/NOME-UTENTE/NOME-REPO/main/nutritional_data.json"  # Modifica con il percorso esatto
+    url = "https://raw.githubusercontent.com/food_nutrition_calculator/main/nutritional_data.json"  # Modifica con il percorso esatto
     try:
         response = requests.get(url)
         response.raise_for_status()  # Controlla errori HTTP
