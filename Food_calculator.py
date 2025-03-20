@@ -1,6 +1,7 @@
 import streamlit as st
 import requests
 import json
+import base64
 from datetime import datetime
 
 # Configura GitHub
@@ -33,12 +34,20 @@ def carica_dati_giornalieri():
 # Funzione per aggiornare i dati giornalieri su GitHub
 def aggiorna_dati_giornalieri(nuovi_dati, sha):
     headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
+    
+    # Converti il dizionario in una stringa JSON
     dati_json = json.dumps(nuovi_dati, indent=4)
+    
+    # Codifica in Base64
+    dati_base64 = base64.b64encode(dati_json.encode("utf-8")).decode("utf-8")
+
+    # Prepara il payload corretto per GitHub
     payload = {
         "message": f"Aggiornamento dati giornalieri {TODAY_DATE}",
-        "content": json.dumps(dati_json).encode("utf-8").decode("unicode_escape"),
+        "content": dati_base64,  # Usa il contenuto in Base64
         "sha": sha
     }
+
     response = requests.put(GITHUB_API_URL, headers=headers, json=payload)
 
     if response.status_code in [200, 201]:
