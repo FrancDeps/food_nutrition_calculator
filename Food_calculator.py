@@ -19,10 +19,10 @@ GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_F
 @st.cache_data
 def load_food_database():
     try:
-        with open("nutritional_data.json", "r") as file:
+        with open("nutritional_data.json", "r", encoding="utf-8") as file:
             return json.load(file)  # Load food database
     except FileNotFoundError:
-        st.error("❌ Error: `nutritional_data.json` not found. Make sure the file is in the project folder.")
+        st.error("❌ Error: `nutritional_data.json` not found. Ensure the file is in the correct directory.")
         return {}
 
 food_database = load_food_database()
@@ -62,6 +62,12 @@ if "daily_data" not in st.session_state:
 # Streamlit Interface
 st.title("🍏 Daily Nutrition Tracker")
 
+# 📌 Sidebar: Verify food database
+st.sidebar.header("📋 Available Food Items")
+st.sidebar.write("Select a food from the database or enter manually.")
+if food_database:
+    st.sidebar.write(", ".join(list(food_database.keys())[:50]))  # Display first 50 food items
+
 # 📌 Select gender and activity level
 gender = st.radio("Select your gender:", ["Male", "Female"])
 activity_level = st.selectbox("Select your activity level:", ["Sedentary", "Moderately Active", "Very Active"])
@@ -69,8 +75,14 @@ activity_level = st.selectbox("Select your activity level:", ["Sedentary", "Mode
 # 📌 Select goal
 goal = st.selectbox("What is your goal?", ["Weight Loss", "Muscle Gain", "Endurance Training", "Ketogenic Diet"])
 
-# 📌 Input to add food item
-food_item = st.text_input("Enter food name (e.g., rice, apple, chicken):").lower()
+# 📌 Food input (with dropdown selection)
+food_item = st.text_input("Enter food name or choose from the list:").strip().lower()
+food_item_selected = st.selectbox("Select food from database (optional)", [""] + sorted(food_database.keys()))
+
+# Use dropdown selection if chosen
+if food_item_selected:
+    food_item = food_item_selected
+
 quantity = st.number_input("Enter quantity in grams:", min_value=1, value=100)
 
 if st.button("Add Food"):
@@ -83,7 +95,7 @@ if st.button("Add Food"):
         update_daily_data(st.session_state.daily_data, st.session_state.sha)
         st.rerun()
     else:
-        st.error("⚠️ Food not found in the database. Please check the spelling.")
+        st.error("⚠️ Food not found. Please check spelling or use dropdown.")
 
 # 📊 Display daily food log with remove button
 st.header(f"📅 Daily Nutrition Data for {TODAY_DATE}")
@@ -110,7 +122,7 @@ for food, info in st.session_state.daily_data.items():
         for macro in macronutrient_totals:
             macronutrient_totals[macro] += food_database[food][macro] * quantity
 
-# **Ensure macronutrient_percentages is always defined**
+# Ensure macronutrient_percentages is always defined
 macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
 
 # Normalize to Percentage
