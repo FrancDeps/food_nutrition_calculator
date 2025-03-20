@@ -150,15 +150,16 @@ else:
 # 📌 Compare macronutrient intake with target range based on goal
 st.header(f"📈 Macronutrient Comparison for **{goal}**")
 
-for macro, percent in macronutrient_consumed.items():
+for macro, percent in total_macronutrients.items():  # 🔄 USARE total_macronutrients
     min_range, max_range = macronutrient_goals[goal][macro]
-    if percent < min_range:
-        st.warning(f"⚠️ **{macro}** intake **{percent}%**: Too LOW compared to the target range **{min_range}-{max_range}%**.")
-    elif percent > max_range:
-        st.warning(f"⚠️ **{macro}** intake **{percent}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
-    else:
-        st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
+    percent = (percent / total_sum) * 100 if total_sum > 0 else 0  # Convert to percentage
 
+    if percent < min_range:
+        st.warning(f"⚠️ **{macro}** intake **{percent:.1f}%**: Too LOW compared to the target range **{min_range}-{max_range}%**.")
+    elif percent > max_range:
+        st.warning(f"⚠️ **{macro}** intake **{percent:.1f}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
+    else:
+        st.success(f"✅ **{macro}** intake **{percent:.1f}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
 
 
 
