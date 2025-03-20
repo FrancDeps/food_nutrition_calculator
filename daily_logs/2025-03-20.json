@@ -4,5 +4,8 @@
     },
     "pasta": {
         "quantity": 200
+    },
+    "apple": {
+        "quantity": 100
     }
 }
