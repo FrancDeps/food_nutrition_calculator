@@ -7,5 +7,8 @@
     },
     "manzo": {
         "quantita": 100
+    },
+    "pollo": {
+        "quantita": 150
     }
 }
