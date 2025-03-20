@@ -1,5 +1,8 @@
 {
     "pasta": {
         "quantity": 100
+    },
+    "beef": {
+        "quantity": 100
     }
 }
