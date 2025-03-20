@@ -21,8 +21,13 @@ calorie_reference = {
     "Donna": {"Sedentario": 1700, "Moderatamente Attivo": 2100, "Attivo": 2500}
 }
 
-# Linee guida OMS per i macronutrienti (in %)
-oms_macros = {"Carboidrati": 50, "Proteine": 20, "Grassi": 30}
+# Range di macronutrienti per obiettivo
+macronutrienti_obiettivo = {
+    "Dimagrimento": {"Carboidrati": (20, 40), "Proteine": (30, 40), "Grassi": (30, 40)},
+    "Massa Muscolare": {"Carboidrati": (45, 55), "Proteine": (20, 30), "Grassi": (20, 30)},
+    "Resistenza Atletica": {"Carboidrati": (55, 65), "Proteine": (15, 20), "Grassi": (20, 25)},
+    "Dieta Chetogenica": {"Carboidrati": (5, 10), "Proteine": (20, 25), "Grassi": (65, 75)}
+}
 
 # Funzione per scaricare i dati giornalieri da GitHub
 def carica_dati_giornalieri():
@@ -38,22 +43,14 @@ def carica_dati_giornalieri():
 
 # Funzione per aggiornare i dati giornalieri su GitHub
 def aggiorna_dati_giornalieri(nuovi_dati, sha):
-    headers = {
-        "Authorization": f"Bearer {GITHUB_TOKEN}",
-        "Accept": "application/vnd.github.v3+json"
-    }
-
-    # Converti il dizionario in JSON
+    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}
     dati_json = json.dumps(nuovi_dati, indent=4)
-
-    # Codifica in Base64
     dati_base64 = base64.b64encode(dati_json.encode("utf-8")).decode("utf-8")
 
-    # Prepara il payload corretto per GitHub
     payload = {
         "message": f"Aggiornamento dati giornalieri {TODAY_DATE}",
-        "content": dati_base64,  # Usa il contenuto in Base64
-        "sha": sha if sha else ""  # Se il file non esiste, lascia vuoto
+        "content": dati_base64,
+        "sha": sha if sha else ""
     }
 
     response = requests.put(GITHUB_API_URL, headers=headers, json=payload)
@@ -69,37 +66,32 @@ dati_giornalieri, sha = carica_dati_giornalieri()
 # Interfaccia Streamlit
 st.title("🍏 Tracker Nutrizionale Giornaliero")
 
-# 📌 Scelta del genere
+# 📌 Scelta del genere e attività fisica
 genere = st.radio("Seleziona il tuo genere:", ["Uomo", "Donna"])
-
-# 📌 Scelta del livello di attività fisica
 livello_attivita = st.selectbox("Seleziona il tuo livello di attività fisica:", 
                                 ["Sedentario", "Moderatamente Attivo", "Attivo"])
+
+# 📌 Scelta dell'obiettivo
+obiettivo = st.selectbox("Qual è il tuo obiettivo?", 
+                         ["Dimagrimento", "Massa Muscolare", "Resistenza Atletica", "Dieta Chetogenica"])
 
 # 📌 Calcolo fabbisogno calorico
 calorie_target = calorie_reference[genere][livello_attivita]
 
-# Input per inserire un alimento
+# 📌 Input per inserire un alimento
 alimento = st.text_input("Inserisci il nome dell'alimento:")
 quantita = st.number_input("Inserisci la quantità in grammi:", min_value=1, value=100)
 
 if st.button("Aggiungi alimento"):
     if alimento:
         alimento = alimento.lower()
-        if alimento in dati_giornalieri:
-            dati_giornalieri[alimento]["quantita"] += quantita
-        else:
-            dati_giornalieri[alimento] = {"quantita": quantita}
-
-        # Aggiorna il file su GitHub
+        dati_giornalieri[alimento] = {"quantita": dati_giornalieri.get(alimento, {"quantita": 0})["quantita"] + quantita}
         aggiorna_dati_giornalieri(dati_giornalieri, sha)
     else:
         st.error("⚠️ Inserisci un nome valido per l'alimento.")
 
-# 📊 Mostra i dati della giornata con bottone per rimuovere alimenti
+# 📊 Mostra gli alimenti registrati con bottone per rimuoverli
 st.header(f"📅 Dati nutrizionali del {TODAY_DATE}")
-
-totale_calorie = sum(v["quantita"] for v in dati_giornalieri.values())  # Somma calorie consumate
 
 if dati_giornalieri:
     for alimento, info in list(dati_giornalieri.items()):
@@ -110,49 +102,30 @@ if dati_giornalieri:
             if st.button(f"❌ Rimuovi", key=alimento):
                 del dati_giornalieri[alimento]
                 aggiorna_dati_giornalieri(dati_giornalieri, sha)
-                st.rerun()  # Ricarica l'interfaccia dopo la rimozione
+                st.rerun()
 else:
     st.info("Nessun alimento registrato oggi.")
 
-# 🔥 Calcolo del deficit o surplus calorico
-bilancio = calorie_target - totale_calorie
-
-st.header("⚖️ Bilancio calorico giornaliero")
-if bilancio > 0:
-    st.info(f"🔥 Sei in **deficit calorico** di **{bilancio} kcal**.")
-elif bilancio < 0:
-    st.warning(f"⚠️ Sei in **surplus calorico** di **{abs(bilancio)} kcal**.")
-else:
-    st.success("✅ Hai raggiunto il tuo fabbisogno calorico esatto!")
-
-# 📊 Grafico a torta della distribuzione dei macronutrienti
+# 📊 Grafico a torta dei macronutrienti
 st.header("📊 Distribuzione dei Macronutrienti")
 
-# Simuliamo i macronutrienti consumati (questo va sostituito con i dati reali se disponibili)
-macronutrienti_consumati = {
-    "Carboidrati": 55,  # Valori d'esempio
-    "Proteine": 18,
-    "Grassi": 27
-}
-
-# Creazione del grafico a torta
+macronutrienti_consumati = {"Carboidrati": 50, "Proteine": 25, "Grassi": 25}  # Dati fittizi per ora
 fig, ax = plt.subplots()
 ax.pie(macronutrienti_consumati.values(), labels=macronutrienti_consumati.keys(), autopct='%1.1f%%', startangle=90)
-ax.axis("equal")  # Mantiene il grafico circolare
-
+ax.axis("equal")
 st.pyplot(fig)
 
-# 📌 Confronto con le linee guida dell'OMS
-st.header("📈 Confronto con le Linee Guida OMS")
+# 📌 Confronto con il range ideale per l'obiettivo scelto
+st.header(f"📈 Confronto con i range per **{obiettivo}**")
 
 for macro, percent in macronutrienti_consumati.items():
-    diff = percent - oms_macros[macro]
-    if diff > 0:
-        st.warning(f"⚠️ Hai consumato **{abs(diff)}%** in più di **{macro}** rispetto alle linee guida OMS.")
-    elif diff < 0:
-        st.info(f"🔹 Hai consumato **{abs(diff)}%** in meno di **{macro}** rispetto alle linee guida OMS.")
+    min_range, max_range = macronutrienti_obiettivo[obiettivo][macro]
+    if percent < min_range:
+        st.warning(f"⚠️ **{macro}** consumato **{percent}%**: troppo BASSO rispetto al range ideale **{min_range}-{max_range}%**.")
+    elif percent > max_range:
+        st.warning(f"⚠️ **{macro}** consumato **{percent}%**: troppo ALTO rispetto al range ideale **{min_range}-{max_range}%**.")
     else:
-        st.success(f"✅ Il tuo consumo di **{macro}** è perfettamente in linea con le linee guida OMS!")
+        st.success(f"✅ **{macro}** consumato **{percent}%**: **IN LINEA** con il range ideale **{min_range}-{max_range}%**.")
 
 
 
