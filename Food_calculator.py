@@ -143,3 +143,55 @@ elif total_calories > recommended_calories:
     st.warning(f"⚠️ You are in a **caloric surplus** of **{total_calories - recommended_calories} kcal**.")
 else:
     st.success("✅ Your calorie intake matches your estimated needs!")
+
+# 📊 Calculate Macronutrient Distribution
+macronutrient_totals = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
+
+for food, info in st.session_state.daily_data.items():
+    if food in food_database:
+        quantity = info["quantity"] / 100  # Convert to per 100g
+        for macro in macronutrient_totals:
+            macronutrient_totals[macro] += food_database[food][macro] * quantity
+
+# **Ensure macronutrient_percentages is always defined**
+macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
+
+# Normalize to Percentage
+total_macros = sum(macronutrient_totals.values())
+if total_macros > 0:
+    macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
+
+    # 📊 Interactive Pie Chart of Macronutrient Distribution
+    st.header("📊 Macronutrient Distribution")
+
+    fig, ax = plt.subplots()
+    ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%',
+           startangle=90)
+    ax.axis("equal")
+    st.pyplot(fig)
+
+else:
+    st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
+
+# 📌 Compare macronutrient intake with target range based on goal
+st.header(f"📈 Macronutrient Comparison for **{goal}**")
+
+macronutrient_ranges = {
+    "Weight Loss": {"Carbohydrates": (20, 40), "Proteins": (30, 40), "Fats": (30, 40)},
+    "Muscle Gain": {"Carbohydrates": (45, 55), "Proteins": (20, 30), "Fats": (20, 30)},
+    "Endurance Training": {"Carbohydrates": (55, 65), "Proteins": (15, 20), "Fats": (20, 25)},
+    "Ketogenic Diet": {"Carbohydrates": (5, 10), "Proteins": (20, 25), "Fats": (65, 75)}
+}
+
+for macro, percent in macronutrient_percentages.items():
+    min_range, max_range = macronutrient_ranges[goal][macro]
+    if percent < min_range:
+        st.warning(
+            f"⚠️ **{macro}** intake **{percent}%**: Too LOW compared to the target range **{min_range}-{max_range}%**.")
+    elif percent > max_range:
+        st.warning(
+            f"⚠️ **{macro}** intake **{percent}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
+    else:
+        st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
+
+
