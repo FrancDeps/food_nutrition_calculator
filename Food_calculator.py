@@ -15,10 +15,18 @@ TODAY_DATE = datetime.today().strftime("%Y-%m-%d")  # Generate file name (YYYY-M
 GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
-# Caloric needs based on gender and activity level
-calorie_reference = {
-    "Male": {"Sedentary": 2000, "Moderately Active": 2500, "Active": 2800},
-    "Female": {"Sedentary": 1700, "Moderately Active": 2100, "Active": 2500}
+# Caloric ranges based on gender and activity level
+calorie_ranges = {
+    "Male": {
+        "Sedentary": "∼2,000-2,200 kcal",
+        "Moderately Active": "∼2,400-2,600 kcal",
+        "Very Active": "∼2,800-3,200 kcal"
+    },
+    "Female": {
+        "Sedentary": "∼1,600-1,800 kcal",
+        "Moderately Active": "∼2,000-2,200 kcal",
+        "Very Active": "∼2,400-2,600 kcal"
+    }
 }
 
 # Macronutrient percentage ranges based on goals
@@ -69,14 +77,15 @@ st.title("🍏 Daily Nutrition Tracker")
 # 📌 Select gender and activity level
 gender = st.radio("Select your gender:", ["Male", "Female"])
 activity_level = st.selectbox("Select your activity level:", 
-                              ["Sedentary", "Moderately Active", "Active"])
+                              ["Sedentary", "Moderately Active", "Very Active"])
 
 # 📌 Select goal
 goal = st.selectbox("What is your goal?", 
                     ["Weight Loss", "Muscle Gain", "Endurance Training", "Ketogenic Diet"])
 
-# 📌 Calculate caloric needs
-calorie_target = calorie_reference[gender][activity_level]
+# 📌 Display caloric range based on gender and activity level
+calorie_target_range = calorie_ranges[gender][activity_level]
+st.info(f"🔥 **Estimated daily caloric needs:** {calorie_target_range}")
 
 # 📌 Input to add food item
 food_item = st.text_input("Enter food name:")
@@ -133,6 +142,7 @@ for macro, percent in macronutrient_consumed.items():
         st.warning(f"⚠️ **{macro}** intake **{percent}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
     else:
         st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
+
 
 
 
