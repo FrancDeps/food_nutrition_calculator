@@ -117,7 +117,17 @@ macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
 total_macros = sum(macronutrient_totals.values())
 if total_macros > 0:
     macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
-  
+    
+    # 📊 Interactive Pie Chart of Macronutrient Distribution
+    st.header("📊 Macronutrient Distribution")
+    
+    fig, ax = plt.subplots()
+    ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%', startangle=90)
+    ax.axis("equal")
+    st.pyplot(fig)
+
+else:
+    st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
 
 # 📌 Compare macronutrient intake with target range based on goal
 st.header(f"📈 Macronutrient Comparison for **{goal}**")
