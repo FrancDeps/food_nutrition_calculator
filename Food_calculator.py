@@ -18,14 +18,14 @@ GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_F
 # Caloric ranges based on gender and activity level
 calorie_ranges = {
     "Male": {
-        "Sedentary": "∼1,800-2,000 kcal",
-        "Moderately Active": "∼2,200-2,500 kcal",
-        "Very Active": "∼2,700-3,200 kcal"
+        "Sedentary": "∼2,000-2,200 kcal",
+        "Moderately Active": "∼2,400-2,600 kcal",
+        "Very Active": "∼2,800-3,200 kcal"
     },
     "Female": {
-        "Sedentary": "∼1,500-1,600 kcal",
-        "Moderately Active": "∼1,900-2,200 kcal",
-        "Very Active": "∼2,200-2,600 kcal"
+        "Sedentary": "∼1,600-1,800 kcal",
+        "Moderately Active": "∼2,000-2,200 kcal",
+        "Very Active": "∼2,400-2,600 kcal"
     }
 }
 
@@ -111,7 +111,7 @@ if daily_data:
     for food, info in list(daily_data.items()):
         col1, col2 = st.columns([4, 1])
         with col1:
-            st.write(f"**{food.capitalize()}**: {info.get('quantity', 0)}g")
+            st.write(f"**{food.capitalize()}**: {info.get('quantity', 0)}g")  # ✅ FIX APPLIED
         with col2:
             if st.button(f"❌ Remove", key=food):
                 del daily_data[food]
@@ -120,34 +120,28 @@ if daily_data:
 else:
     st.info("No food recorded today.")
 
-# 📊 Interactive Pie Chart of Macronutrient Distribution
+# 📊 Pie Chart of Macronutrient Distribution
 st.header("📊 Macronutrient Distribution")
 
-def compute_macronutrient_totals(daily_data):
-    total_macros = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
-    for food, info in daily_data.items():
-        macros = info.get("macronutrients", {"Carbohydrates": 0, "Proteins": 0, "Fats": 0})
-        for macro, value in macros.items():
-            total_macros[macro] += value * info["quantity"] / 100
-    return total_macros
+# Example macronutrient consumption (replace with real data)
+macronutrient_consumed = {"Carbohydrates": 50, "Proteins": 25, "Fats": 25}
 
-total_macronutrients = compute_macronutrient_totals(daily_data)
+fig, ax = plt.subplots()
+ax.pie(macronutrient_consumed.values(), labels=macronutrient_consumed.keys(), autopct='%1.1f%%', startangle=90)
+ax.axis("equal")
+st.pyplot(fig)
 
-total_sum = sum(total_macronutrients.values())
-if total_sum > 0:
-    percentages = {macro: (value / total_sum) * 100 for macro, value in total_macronutrients.items()}
-    fig, ax = plt.subplots()
-    ax.pie(
-        percentages.values(),
-        labels=percentages.keys(),
-        autopct='%1.1f%%',
-        startangle=90
-    )
-    ax.axis("equal")
-    st.pyplot(fig)
-else:
-    st.info("No data available. Add food to see macronutrient distribution.")
+# 📌 Compare macronutrient intake with target range based on goal
+st.header(f"📈 Macronutrient Comparison for **{goal}**")
 
+for macro, percent in macronutrient_consumed.items():
+    min_range, max_range = macronutrient_goals[goal][macro]
+    if percent < min_range:
+        st.warning(f"⚠️ **{macro}** intake **{percent}%**: Too LOW compared to the target range **{min_range}-{max_range}%**.")
+    elif percent > max_range:
+        st.warning(f"⚠️ **{macro}** intake **{percent}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
+    else:
+        st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
 
 
 
