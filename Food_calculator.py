@@ -194,4 +194,38 @@ for macro, percent in macronutrient_percentages.items():
     else:
         st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
 
+# 🚨 Funny + personalized warning for extreme intake
+if total_calories > 4000:
+    # Messaggi personalizzati per ciascun obiettivo
+    goal_messages = {
+        "Weight Loss": "Zio… dovevi perdere peso, non sfondare il frigo! 🥲",
+        "Muscle Gain": "Ok massa… ma così ti esplodono i bicipiti e il fegato 💪🍕",
+        "Endurance Training": "Stai preparando la maratona o un buffet all you can eat? 🏃‍♂️🍩",
+        "Ketogenic Diet": "Zio, è la *keto*, non il *cheat day* 😵🥓"
+    }
+
+    # Aggiungiamo un flag nel log per immortalare l’evento 😅
+    st.session_state.daily_data["🔥_overlimit"] = {
+        "status": True,
+        "calories": total_calories,
+        "message": goal_messages.get(goal, "Stai esagerando FRA!")
+    }
+    update_daily_data(st.session_state.daily_data, st.session_state.sha)
+
+    # Visual effect & GIF
+    st.markdown(
+        f"""
+        <div style='text-align: center; padding: 20px; border: 5px dashed red; border-radius: 20px; background-color: #fff3f3;'>
+            <h1 style='color: red; font-size: 60px; animation: blinker 1s linear infinite;'>💥 STAI SGRAVANDO FRA 💥</h1>
+            <h2 style='color: orange; font-size: 26px;'>{goal_messages.get(goal)}</h2>
+            <img src="https://media.giphy.com/media/3o7TKtnuHOHHUjR38Y/giphy.gif" width="400">
+        </div>
+        <style>
+            @keyframes blinker {{
+                50% {{ opacity: 0; }}
+            }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
