@@ -119,17 +119,33 @@ if daily_data:
                 st.rerun()
 else:
     st.info("No food recorded today.")
-
-# 📊 Pie Chart of Macronutrient Distribution
+# 📊 Interactive Pie Chart of Macronutrient Distribution
 st.header("📊 Macronutrient Distribution")
 
-# Example macronutrient consumption (replace with real data)
-macronutrient_consumed = {"Carbohydrates": 50, "Proteins": 25, "Fats": 25}
+def compute_macronutrient_totals(daily_data):
+    total_macros = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
+    for food, info in daily_data.items():
+        macros = info.get("macronutrients", {"Carbohydrates": 0, "Proteins": 0, "Fats": 0})
+        for macro, value in macros.items():
+            total_macros[macro] += value * info["quantity"] / 100
+    return total_macros
 
-fig, ax = plt.subplots()
-ax.pie(macronutrient_consumed.values(), labels=macronutrient_consumed.keys(), autopct='%1.1f%%', startangle=90)
-ax.axis("equal")
-st.pyplot(fig)
+total_macronutrients = compute_macronutrient_totals(daily_data)
+
+total_sum = sum(total_macronutrients.values())
+if total_sum > 0:
+    percentages = {macro: (value / total_sum) * 100 for macro, value in total_macronutrients.items()}
+    fig, ax = plt.subplots()
+    ax.pie(
+        percentages.values(),
+        labels=percentages.keys(),
+        autopct='%1.1f%%',
+        startangle=90
+    )
+    ax.axis("equal")
+    st.pyplot(fig)
+else:
+    st.info("No data available. Add food to see macronutrient distribution.")
 
 # 📌 Compare macronutrient intake with target range based on goal
 st.header(f"📈 Macronutrient Comparison for **{goal}**")
