@@ -287,4 +287,922 @@
         "carbs": 15,
         "fat": 0.2
     }
+    {
+        "name": "lamb",
+        "protein": 25,
+        "carbs": 0,
+        "fat": 20
+    },
+    {
+        "name": "rabbit",
+        "protein": 22,
+        "carbs": 0,
+        "fat": 5
+    },
+    {
+        "name": "horse meat",
+        "protein": 28,
+        "carbs": 0,
+        "fat": 4
+    },
+    {
+        "name": "quail",
+        "protein": 25,
+        "carbs": 0,
+        "fat": 12
+    },
+    {
+        "name": "duck",
+        "protein": 19,
+        "carbs": 0,
+        "fat": 15
+    },
+    {
+        "name": "clams",
+        "protein": 14,
+        "carbs": 3,
+        "fat": 1.5
+    },
+    {
+        "name": "shrimp",
+        "protein": 20,
+        "carbs": 0,
+        "fat": 1
+    },
+    {
+        "name": "cuttlefish",
+        "protein": 18,
+        "carbs": 2,
+        "fat": 1
+    },
+    {
+        "name": "octopus",
+        "protein": 16,
+        "carbs": 4,
+        "fat": 1
+    },
+    {
+        "name": "crab",
+        "protein": 19,
+        "carbs": 0,
+        "fat": 1
+    },
+    {
+        "name": "mussels",
+        "protein": 12,
+        "carbs": 3,
+        "fat": 2
+    },
+    {
+        "name": "sardines",
+        "protein": 24,
+        "carbs": 0,
+        "fat": 11
+    },
+    {
+        "name": "anchovies",
+        "protein": 20,
+        "carbs": 0,
+        "fat": 10
+    },
+    {
+        "name": "trout",
+        "protein": 22,
+        "carbs": 0,
+        "fat": 7
+    },
+    {
+        "name": "halibut",
+        "protein": 20,
+        "carbs": 0,
+        "fat": 5
+    },
+    {
+        "name": "oysters",
+        "protein": 10,
+        "carbs": 6,
+        "fat": 2
+    },
+    {
+        "name": "lobster",
+        "protein": 19,
+        "carbs": 1,
+        "fat": 1
+    },
+    {
+        "name": "fish roe",
+        "protein": 25,
+        "carbs": 4,
+        "fat": 10
+    },
+    {
+        "name": "soy",
+        "protein": 36,
+        "carbs": 30,
+        "fat": 20
+    },
+    {
+        "name": "lupins",
+        "protein": 36,
+        "carbs": 40,
+        "fat": 10
+    },
+    {
+        "name": "bulgur",
+        "protein": 12,
+        "carbs": 76,
+        "fat": 1.5
+    },
+    {
+        "name": "couscous",
+        "protein": 13,
+        "carbs": 77,
+        "fat": 0.6
+    },
+    {
+        "name": "amaranth",
+        "protein": 14,
+        "carbs": 65,
+        "fat": 7
+    },
+    {
+        "name": "teff",
+        "protein": 13,
+        "carbs": 70,
+        "fat": 2.5
+    },
+    {
+        "name": "beans",
+        "protein": 7,
+        "carbs": 21,
+        "fat": 0.5
+    },
+    {
+        "name": "millet",
+        "protein": 11,
+        "carbs": 72,
+        "fat": 4
+    },
+    {
+        "name": "kamut",
+        "protein": 15,
+        "carbs": 70,
+        "fat": 2
+    },
+    {
+        "name": "rye",
+        "protein": 9,
+        "carbs": 75,
+        "fat": 2
+    },
+    {
+        "name": "tapioca",
+        "protein": 0,
+        "carbs": 88,
+        "fat": 0.2
+    },
+    {
+        "name": "red rice",
+        "protein": 8,
+        "carbs": 74,
+        "fat": 2
+    },
+    {
+        "name": "black rice",
+        "protein": 9,
+        "carbs": 72,
+        "fat": 3
+    },
+    {
+        "name": "wild rice",
+        "protein": 14,
+        "carbs": 75,
+        "fat": 1
+    },
+    {
+        "name": "chickpea flour",
+        "protein": 22,
+        "carbs": 58,
+        "fat": 6
+    },
+    {
+        "name": "chestnuts (dried)",
+        "protein": 6,
+        "carbs": 84,
+        "fat": 2
+    },
+    {
+        "name": "polenta",
+        "protein": 8,
+        "carbs": 75,
+        "fat": 1
+    },
+    {
+        "name": "barley",
+        "protein": 12,
+        "carbs": 73,
+        "fat": 2
+    },
+    {
+        "name": "whole wheat bran",
+        "protein": 15,
+        "carbs": 65,
+        "fat": 5
+    },
+    {
+        "name": "whole wheat crackers",
+        "protein": 10,
+        "carbs": 60,
+        "fat": 4
+    },
+    {
+        "name": "whole wheat breadsticks",
+        "protein": 12,
+        "carbs": 65,
+        "fat": 5
+    },
+    {
+        "name": "rice cakes",
+        "protein": 7,
+        "carbs": 80,
+        "fat": 1
+    },
+    {
+        "name": "pumpkin",
+        "protein": 1,
+        "carbs": 7,
+        "fat": 0.1
+    },
+    {
+        "name": "wasabi",
+        "protein": 4,
+        "carbs": 20,
+        "fat": 0.6
+    }
+    {
+        "name": "hot dog",
+        "protein": 11,
+        "carbs": 2,
+        "fat": 30
+    },
+    {
+        "name": "hamburger",
+        "protein": 14,
+        "carbs": 31,
+        "fat": 12
+    },
+    {
+        "name": "pizza",
+        "protein": 12,
+        "carbs": 35,
+        "fat": 10
+    },
+    {
+        "name": "lasagna",
+        "protein": 10,
+        "carbs": 40,
+        "fat": 8
+    },
+    {
+        "name": "french fries",
+        "protein": 3,
+        "carbs": 41,
+        "fat": 17
+    },
+    {
+        "name": "potato chips",
+        "protein": 7,
+        "carbs": 50,
+        "fat": 35
+    },
+    {
+        "name": "popcorn",
+        "protein": 4,
+        "carbs": 78,
+        "fat": 4
+    },
+    {
+        "name": "chicken nuggets",
+        "protein": 15,
+        "carbs": 18,
+        "fat": 22
+    },
+    {
+        "name": "fish sticks",
+        "protein": 12,
+        "carbs": 25,
+        "fat": 15
+    },
+    {
+        "name": "bacon",
+        "protein": 37,
+        "carbs": 1,
+        "fat": 42
+    },
+    {
+        "name": "salami",
+        "protein": 22,
+        "carbs": 1,
+        "fat": 30
+    },
+    {
+        "name": "mortadella",
+        "protein": 15,
+        "carbs": 2,
+        "fat": 28
+    },
+    {
+        "name": "sausages",
+        "protein": 18,
+        "carbs": 2,
+        "fat": 31
+    },
+    {
+        "name": "cheddar cheese",
+        "protein": 25,
+        "carbs": 2,
+        "fat": 33
+    },
+    {
+        "name": "mozzarella",
+        "protein": 22,
+        "carbs": 3,
+        "fat": 18
+    },
+    {
+        "name": "parmesan",
+        "protein": 35,
+        "carbs": 3,
+        "fat": 28
+    },
+    {
+        "name": "butter",
+        "protein": 1,
+        "carbs": 0,
+        "fat": 81
+    },
+    {
+        "name": "margarine",
+        "protein": 0,
+        "carbs": 0,
+        "fat": 80
+    },
+    {
+        "name": "mayonnaise",
+        "protein": 1,
+        "carbs": 5,
+        "fat": 75
+    },
+    {
+        "name": "ketchup",
+        "protein": 1,
+        "carbs": 25,
+        "fat": 0
+    },
+    {
+        "name": "mustard",
+        "protein": 5,
+        "carbs": 6,
+        "fat": 10
+    },
+    {
+        "name": "soy sauce",
+        "protein": 8,
+        "carbs": 5,
+        "fat": 0
+    },
+    {
+        "name": "barbecue sauce",
+        "protein": 2,
+        "carbs": 30,
+        "fat": 1
+    },
+    {
+        "name": "honey",
+        "protein": 0,
+        "carbs": 82,
+        "fat": 0
+    },
+    {
+        "name": "jam",
+        "protein": 0,
+        "carbs": 70,
+        "fat": 0
+    },
+    {
+        "name": "nutella",
+        "protein": 6,
+        "carbs": 57,
+        "fat": 31
+    },
+    {
+        "name": "peanut butter",
+        "protein": 25,
+        "carbs": 20,
+        "fat": 50
+    },
+    {
+        "name": "ice cream",
+        "protein": 4,
+        "carbs": 23,
+        "fat": 11
+    },
+    {
+        "name": "chocolate milk",
+        "protein": 8,
+        "carbs": 25,
+        "fat": 4
+    },
+    {
+        "name": "cookies",
+        "protein": 5,
+        "carbs": 70,
+        "fat": 20
+    },
+    {
+        "name": "croissant",
+        "protein": 6,
+        "carbs": 45,
+        "fat": 25
+    },
+    {
+        "name": "donut",
+        "protein": 5,
+        "carbs": 50,
+        "fat": 22
+    },
+    {
+        "name": "cereal",
+        "protein": 7,
+        "carbs": 78,
+        "fat": 6
+    },
+    {
+        "name": "granola",
+        "protein": 10,
+        "carbs": 65,
+        "fat": 15
+    },
+    {
+        "name": "energy bar",
+        "protein": 15,
+        "carbs": 45,
+        "fat": 10
+    },
+    {
+        "name": "protein shake",
+        "protein": 25,
+        "carbs": 30,
+        "fat": 5
+    },
+    {
+        "name": "whole milk",
+        "protein": 3,
+        "carbs": 5,
+        "fat": 8
+    },
+    {
+        "name": "condensed milk",
+        "protein": 8,
+        "carbs": 55,
+        "fat": 10
+    },
+    {
+        "name": "evaporated milk",
+        "protein": 7,
+        "carbs": 10,
+        "fat": 7
+    },
+    {
+        "name": "rice pudding",
+        "protein": 3,
+        "carbs": 20,
+        "fat": 5
+    },
+    {
+        "name": "custard",
+        "protein": 5,
+        "carbs": 15,
+        "fat": 6
+    },
+    {
+        "name": "cheesecake",
+        "protein": 8,
+        "carbs": 30,
+        "fat": 25
+    },
+    {
+        "name": "tiramisu",
+        "protein": 6,
+        "carbs": 45,
+        "fat": 25
+    },
+    {
+        "name": "pancakes",
+        "protein": 7,
+        "carbs": 55,
+        "fat": 10
+    },
+    {
+        "name": "waffles",
+        "protein": 6,
+        "carbs": 50,
+        "fat": 12
+    },
+    {
+        "name": "crackers",
+        "protein": 6,
+        "carbs": 70,
+        "fat": 10
+    },
+    {
+        "name": "breadsticks",
+        "protein": 8,
+        "carbs": 65,
+        "fat": 5
+    },
+    {
+        "name": "baguette",
+        "protein": 9,
+        "carbs": 55,
+        "fat": 2
+    },
+    {
+        "name": "white bread",
+        "protein": 8,
+        "carbs": 50,
+        "fat": 3
+    },
+    {
+        "name": "whole wheat bread",
+        "protein": 10,
+        "carbs": 45,
+        "fat": 4
+    },
+    {
+        "name": "brownie",
+        "protein": 4,
+        "carbs": 50,
+        "fat": 22
+    },
+    {
+        "name": "apple pie",
+        "protein": 3,
+        "carbs": 40,
+        "fat": 15
+    },
+    {
+        "name": "shortbread",
+        "protein": 4,
+        "carbs": 50,
+        "fat": 30
+    },
+    {
+        "name": "muffin",
+        "protein": 5,
+        "carbs": 55,
+        "fat": 15
+    },
+    {
+        "name": "carrot cake",
+        "protein": 6,
+        "carbs": 50,
+        "fat": 18
+    },
+    {
+        "name": "yogurt with fruit",
+        "protein": 6,
+        "carbs": 20,
+        "fat": 4
+    },
+    {
+        "name": "pasta with sauce",
+        "protein": 8,
+        "carbs": 60,
+        "fat": 5
+    },
+    {
+        "name": "instant noodles",
+        "protein": 7,
+        "carbs": 65,
+        "fat": 15
+    },
+    {
+        "name": "duck liver (foie gras)",
+        "protein": 14,
+        "carbs": 1,
+        "fat": 56
+    },
+    {
+        "name": "rabbit liver",
+        "protein": 18,
+        "carbs": 2,
+        "fat": 5
+    },
+    {
+        "name": "venison",
+        "protein": 30,
+        "carbs": 0,
+        "fat": 4
+    },
+    {
+        "name": "pheasant",
+        "protein": 25,
+        "carbs": 0,
+        "fat": 6
+    },
+    {
+        "name": "goat meat",
+        "protein": 27,
+        "carbs": 0,
+        "fat": 9
+    },
+    {
+        "name": "quail eggs",
+        "protein": 13,
+        "carbs": 1,
+        "fat": 11
+    },
+    {
+        "name": "eel",
+        "protein": 18,
+        "carbs": 0,
+        "fat": 20
+    },
+    {
+        "name": "catfish",
+        "protein": 15,
+        "carbs": 0,
+        "fat": 12
+    },
+    {
+        "name": "snapper",
+        "protein": 20,
+        "carbs": 0,
+        "fat": 5
+    },
+    {
+        "name": "mullet",
+        "protein": 19,
+        "carbs": 0,
+        "fat": 4
+    },
+    {
+        "name": "barramundi",
+        "protein": 21,
+        "carbs": 0,
+        "fat": 3
+    },
+    {
+        "name": "herring",
+        "protein": 18,
+        "carbs": 0,
+        "fat": 9
+    },
+    {
+        "name": "tilapia",
+        "protein": 20,
+        "carbs": 0,
+        "fat": 2
+    },
+    {
+        "name": "smoked salmon",
+        "protein": 22,
+        "carbs": 0,
+        "fat": 12
+    },
+    {
+        "name": "clotted cream",
+        "protein": 3,
+        "carbs": 2,
+        "fat": 55
+    },
+    {
+        "name": "goat cheese",
+        "protein": 21,
+        "carbs": 2,
+        "fat": 25
+    },
+    {
+        "name": "blue cheese",
+        "protein": 20,
+        "carbs": 3,
+        "fat": 30
+    },
+    {
+        "name": "brie",
+        "protein": 18,
+        "carbs": 1,
+        "fat": 29
+    },
+    {
+        "name": "feta cheese",
+        "protein": 14,
+        "carbs": 4,
+        "fat": 21
+    },
+    {
+        "name": "halloumi",
+        "protein": 21,
+        "carbs": 2,
+        "fat": 26
+    },
+    {
+        "name": "oat milk",
+        "protein": 3,
+        "carbs": 8,
+        "fat": 2
+    },
+    {
+        "name": "hazelnut milk",
+        "protein": 1,
+        "carbs": 5,
+        "fat": 2
+    },
+    {
+        "name": "pecan butter",
+        "protein": 9,
+        "carbs": 18,
+        "fat": 72
+    },
+    {
+        "name": "tahini",
+        "protein": 17,
+        "carbs": 22,
+        "fat": 53
+    },
+    {
+        "name": "date syrup",
+        "protein": 1,
+        "carbs": 75,
+        "fat": 0
+    },
+    {
+        "name": "agave syrup",
+        "protein": 0,
+        "carbs": 76,
+        "fat": 0
+    },
+    {
+        "name": "coconut sugar",
+        "protein": 0,
+        "carbs": 75,
+        "fat": 0
+    },
+    {
+        "name": "molasses",
+        "protein": 0,
+        "carbs": 74,
+        "fat": 0
+    },
+    {
+        "name": "spelt flour",
+        "protein": 13,
+        "carbs": 70,
+        "fat": 2
+    },
+    {
+        "name": "rye flour",
+        "protein": 9,
+        "carbs": 75,
+        "fat": 2
+    },
+    {
+        "name": "sourdough bread",
+        "protein": 9,
+        "carbs": 50,
+        "fat": 2
+    },
+    {
+        "name": "rye bread",
+        "protein": 8,
+        "carbs": 55,
+        "fat": 3
+    },
+    {
+        "name": "corn tortillas",
+        "protein": 6,
+        "carbs": 55,
+        "fat": 2
+    },
+    {
+        "name": "whole wheat tortillas",
+        "protein": 9,
+        "carbs": 52,
+        "fat": 3
+    },
+    {
+        "name": "spelt pasta",
+        "protein": 13,
+        "carbs": 70,
+        "fat": 2
+    },
+    {
+        "name": "kamut pasta",
+        "protein": 14,
+        "carbs": 68,
+        "fat": 2
+    },
+    {
+        "name": "barley flakes",
+        "protein": 12,
+        "carbs": 73,
+        "fat": 2
+    },
+    {
+        "name": "wheat bran",
+        "protein": 16,
+        "carbs": 65,
+        "fat": 4
+    },
+    {
+        "name": "buckwheat flour",
+        "protein": 13,
+        "carbs": 72,
+        "fat": 3
+    },
+    {
+        "name": "prickly pear",
+        "protein": 1,
+        "carbs": 10,
+        "fat": 0.5
+    },
+    {
+        "name": "starfruit",
+        "protein": 1,
+        "carbs": 6,
+        "fat": 0.3
+    },
+    {
+        "name": "jackfruit",
+        "protein": 2,
+        "carbs": 23,
+        "fat": 1
+    },
+    {
+        "name": "soursop",
+        "protein": 1,
+        "carbs": 17,
+        "fat": 0.3
+    },
+    {
+        "name": "yuzu",
+        "protein": 1,
+        "carbs": 9,
+        "fat": 0.3
+    },
+    {
+        "name": "pomelo",
+        "protein": 1,
+        "carbs": 9,
+        "fat": 0.2
+    },
+    {
+        "name": "dragon fruit",
+        "protein": 1,
+        "carbs": 11,
+        "fat": 0.4
+    },
+    {
+        "name": "longan",
+        "protein": 1,
+        "carbs": 15,
+        "fat": 0.1
+    },
+    {
+        "name": "persimmon",
+        "protein": 1,
+        "carbs": 18,
+        "fat": 0.3
+    },
+    {
+        "name": "lotus root",
+        "protein": 2,
+        "carbs": 17,
+        "fat": 0.1
+    },
+    {
+        "name": "water chestnut",
+        "protein": 1,
+        "carbs": 24,
+        "fat": 0.1
+    },
+    {
+        "name": "cassava",
+        "protein": 1,
+        "carbs": 38,
+        "fat": 0.3
+    },
+    {
+        "name": "taro root",
+        "protein": 2,
+        "carbs": 27,
+        "fat": 0.1
+    },
+    {
+        "name": "bamboo shoots",
+        "protein": 3,
+        "carbs": 6,
+        "fat": 0.2
+    }
 ]
