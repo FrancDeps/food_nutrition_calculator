@@ -4,5 +4,8 @@
     },
     "apple": {
         "quantity": 100
+    },
+    "chicken": {
+        "quantity": 100
     }
 }
