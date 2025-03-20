@@ -110,11 +110,17 @@ for food, info in st.session_state.daily_data.items():
     if food in food_database:
         quantity = info["quantity"] / 100  
         
-        # Controllo chiave calorie
-        if "calories" in food_database[food]:
-            total_calories += food_database[food]["calories"] * quantity
-        else:
-            st.warning(f"⚠️ No calorie data for {food.capitalize()}, skipped in calorie count.")
+        # Calcolo delle calorie dai macronutrienti
+        macronutrient_totals["Carbohydrates"] += food_database[food].get("Carbohydrates", 0) * quantity
+        macronutrient_totals["Proteins"] += food_database[food].get("Proteins", 0) * quantity
+        macronutrient_totals["Fats"] += food_database[food].get("Fats", 0) * quantity
+
+# Calcolo delle calorie totali
+total_calories = (
+    macronutrient_totals["Carbohydrates"] * 4 +
+    macronutrient_totals["Proteins"] * 4 +
+    macronutrient_totals["Fats"] * 9
+)
 
 # 📊 Display total calories
 st.header("🔥 Total Calories Consumed Today")
@@ -137,17 +143,3 @@ elif total_calories > recommended_calories:
     st.warning(f"⚠️ You are in a **caloric surplus** of **{total_calories - recommended_calories} kcal**.")
 else:
     st.success("✅ Your calorie intake matches your estimated needs!")
-
-# 📊 Macronutrient distribution chart
-st.header("📊 Macronutrient Distribution")
-
-total_macros = sum(macronutrient_totals.values())
-if total_macros > 0:
-    macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
-    
-    fig, ax = plt.subplots()
-    ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%', startangle=90)
-    ax.axis("equal")
-    st.pyplot(fig)
-else:
-    st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
