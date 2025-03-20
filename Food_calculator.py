@@ -96,14 +96,21 @@ if st.button("Aggiungi alimento"):
     else:
         st.error("⚠️ Inserisci un nome valido per l'alimento.")
 
-# 📊 Mostra i dati della giornata
+# 📊 Mostra i dati della giornata con bottone per rimuovere alimenti
 st.header(f"📅 Dati nutrizionali del {TODAY_DATE}")
 
 totale_calorie = sum(v["quantita"] for v in dati_giornalieri.values())  # Somma calorie consumate
 
 if dati_giornalieri:
-    for alimento, info in dati_giornalieri.items():
-        st.write(f"**{alimento.capitalize()}**: {info['quantita']}g")
+    for alimento, info in list(dati_giornalieri.items()):
+        col1, col2 = st.columns([4, 1])
+        with col1:
+            st.write(f"**{alimento.capitalize()}**: {info['quantita']}g")
+        with col2:
+            if st.button(f"❌ Rimuovi", key=alimento):
+                del dati_giornalieri[alimento]
+                aggiorna_dati_giornalieri(dati_giornalieri, sha)
+                st.experimental_rerun()  # Ricarica l'interfaccia dopo la rimozione
 else:
     st.info("Nessun alimento registrato oggi.")
 
@@ -146,6 +153,7 @@ for macro, percent in macronutrienti_consumati.items():
         st.info(f"🔹 Hai consumato **{abs(diff)}%** in meno di **{macro}** rispetto alle linee guida OMS.")
     else:
         st.success(f"✅ Il tuo consumo di **{macro}** è perfettamente in linea con le linee guida OMS!")
+
 
 
 
