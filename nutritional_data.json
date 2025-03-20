@@ -204,6 +204,12 @@
         "Fats": 0.1
     },
     {
+        "name": "grana",
+        "Proteins": 33,
+        "Carbohydrates": 1,
+        "Fats": 29
+    },
+    {
         "name": "asparagus",
         "Proteins": 2,
         "Carbohydrates": 3,
