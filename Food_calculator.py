@@ -110,7 +110,7 @@ if dati_giornalieri:
             if st.button(f"❌ Rimuovi", key=alimento):
                 del dati_giornalieri[alimento]
                 aggiorna_dati_giornalieri(dati_giornalieri, sha)
-                st.experimental_rerun()  # Ricarica l'interfaccia dopo la rimozione
+                st.rerun()  # Ricarica l'interfaccia dopo la rimozione
 else:
     st.info("Nessun alimento registrato oggi.")
 
