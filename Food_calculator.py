@@ -15,15 +15,18 @@ TODAY_DATE = datetime.today().strftime("%Y-%m-%d")
 GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
-# Load Food Database from JSON File
-@st.cache_data
 def load_food_database():
+    url = "https://raw.githubusercontent.com/NOME-UTENTE/NOME-REPO/main/nutritional_data.json"  # Modifica con il percorso esatto
     try:
-        with open("nutritional_data.json", "r") as file:
-            return json.load(file)  # Load food database
-    except FileNotFoundError:
-        st.error("❌ Error: `nutritional_data.json` not found. Make sure the file is in the project folder.")
-        return {}
+        response = requests.get(url)
+        response.raise_for_status()  # Controlla errori HTTP
+        return response.json()  # Converte direttamente in JSON
+    except json.JSONDecodeError:
+        st.error("Errore nel file JSON! Verifica che il file sia corretto.")
+        return []
+    except requests.exceptions.RequestException as e:
+        st.error(f"Errore di connessione: {e}")
+        return []
 
 food_database = load_food_database()
 
