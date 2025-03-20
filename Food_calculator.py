@@ -120,9 +120,6 @@ if daily_data:
 else:
     st.info("No food recorded today.")
 
-# 📊 Pie Chart of Macronutrient Distribution
-st.header("📊 Macronutrient Distribution")
-
 # Example macronutrient consumption (replace with real data)
 macronutrient_consumed = {"Carbohydrates": 50, "Proteins": 25, "Fats": 25}
 
@@ -142,7 +139,6 @@ for macro, percent in macronutrient_consumed.items():
         st.warning(f"⚠️ **{macro}** intake **{percent}%**: Too HIGH compared to the target range **{min_range}-{max_range}%**.")
     else:
         st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
-
 
 
 
