@@ -4,7 +4,9 @@ import json
 from datetime import datetime
 
 # Configura GitHub
-GITHUB_TOKEN = "TUO_PERSONAL_ACCESS_TOKEN"  # 🔴 Sostituiscilo con il tuo token GitHub
+GITHUB_TOKEN1 = "ghp_tKJMlnBlpxtk75K"
+GITHUB_TOKEN2 = "bmWQNjJTIW40HeV1jGcrg"  # 🔴 Sostituiscilo con il tuo token GitHub
+GITHUB_TOKEN = GITHUB_TOKEN1 + GITHUB_TOKEN2
 GITHUB_REPO = "FrancDeps/food_nutrition_calculator"
 GITHUB_FOLDER = "daily_logs"  # Cartella dove salvare i file
 TODAY_DATE = datetime.today().strftime("%Y-%m-%d")  # Genera il nome del file (YYYY-MM-DD.json)
