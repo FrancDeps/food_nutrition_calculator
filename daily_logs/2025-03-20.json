@@ -4,5 +4,8 @@
     },
     "beef": {
         "quantity": 100
+    },
+    "eggs": {
+        "quantity": 100
     }
 }
