@@ -10,5 +10,8 @@
     },
     "grana": {
         "quantity": 100
+    },
+    "butter": {
+        "quantity": 1000
     }
 }
