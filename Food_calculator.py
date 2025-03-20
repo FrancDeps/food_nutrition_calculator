@@ -6,10 +6,10 @@ import matplotlib.pyplot as plt
 from datetime import datetime
 
 # GitHub Configuration
-GITHUB_TOKEN1 = "ghp_d4O4fRlt57kLoQr"
-GITHUB_TOKEN2 = "lmjG8R7nijddBJl46IGj1"
+GITHUB_TOKEN1 = "ghp_tKJMlnBlpxtk75K"
+GITHUB_TOKEN2 = "bmWQNjJTIW40HeV1jGcrg"  # 🔴 Replace with your GitHub token
 GITHUB_TOKEN = GITHUB_TOKEN1 + GITHUB_TOKEN2
-GITHUB_REPO = "Sapu98/streamlitFood"
+GITHUB_REPO = "FrancDeps/food_nutrition_calculator"
 GITHUB_FOLDER = "daily_logs"
 TODAY_DATE = datetime.today().strftime("%Y-%m-%d")
 GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json"
