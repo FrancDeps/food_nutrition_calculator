@@ -38,7 +38,7 @@ def load_daily_data():
         decoded_content = base64.b64decode(data["content"]).decode("utf-8")
         return json.loads(decoded_content), data["sha"]
     else:
-        return {}, None  # Returns an empty dictionary if the file doesn't exist
+        return {}, None
 
 # Update daily data on GitHub
 def update_daily_data(new_data, sha):
@@ -109,8 +109,7 @@ total_calories = 0
 for food, info in st.session_state.daily_data.items():
     if food in food_database:
         quantity = info["quantity"] / 100  
-        
-        # Calcolo delle calorie dai macronutrienti
+
         macronutrient_totals["Carbohydrates"] += food_database[food].get("Carbohydrates", 0) * quantity
         macronutrient_totals["Proteins"] += food_database[food].get("Proteins", 0) * quantity
         macronutrient_totals["Fats"] += food_database[food].get("Fats", 0) * quantity
@@ -141,6 +140,29 @@ if total_calories < recommended_calories:
     st.warning(f"⚠️ You are in a **caloric deficit** of **{recommended_calories - total_calories} kcal**.")
 elif total_calories > recommended_calories:
     st.warning(f"⚠️ You are in a **caloric surplus** of **{total_calories - recommended_calories} kcal**.")
+
+    # Funny personalized warning for surplus
+    goal_messages = {
+        "Weight Loss": "Zio… dovevi perdere peso, non sfondare il frigo! 🥲",
+        "Muscle Gain": "Ok massa… ma così ti esplodono i bicipiti e il fegato 💪🍕",
+        "Endurance Training": "Stai preparando la maratona o un buffet all you can eat? 🏃‍♂️🍩",
+        "Ketogenic Diet": "Zio, è la *keto*, non il *cheat day* 😵🥓"
+    }
+
+    st.markdown(
+        f"""
+        <div style='text-align: center; padding: 20px; border: 5px dashed red; border-radius: 20px; background-color: #fff3f3;'>
+            <h1 style='color: red; font-size: 60px; animation: blinker 1s linear infinite;'>💥 STAI SGRAVANDO FRA 💥</h1>
+            <h2 style='color: orange; font-size: 26px;'>{goal_messages.get(goal)}</h2>
+        </div>
+        <style>
+            @keyframes blinker {{
+                50% {{ opacity: 0; }}
+            }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 else:
     st.success("✅ Your calorie intake matches your estimated needs!")
 
@@ -149,19 +171,15 @@ macronutrient_totals = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
 
 for food, info in st.session_state.daily_data.items():
     if food in food_database:
-        quantity = info["quantity"] / 100  # Convert to per 100g
+        quantity = info["quantity"] / 100
         for macro in macronutrient_totals:
             macronutrient_totals[macro] += food_database[food][macro] * quantity
 
-# **Ensure macronutrient_percentages is always defined**
 macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
-
-# Normalize to Percentage
 total_macros = sum(macronutrient_totals.values())
 if total_macros > 0:
     macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
 
-    # 📊 Interactive Pie Chart of Macronutrient Distribution
     st.header("📊 Macronutrient Distribution")
 
     fig, ax = plt.subplots()
@@ -169,7 +187,6 @@ if total_macros > 0:
            startangle=90)
     ax.axis("equal")
     st.pyplot(fig)
-
 else:
     st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
 
@@ -194,37 +211,4 @@ for macro, percent in macronutrient_percentages.items():
     else:
         st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
 
-# 🚨 Funny + personalized warning for extreme intake
-if total_calories > 4000:
-    # Messaggi personalizzati per ciascun obiettivo
-    goal_messages = {
-        "Weight Loss": "Zio… dovevi perdere peso, non sfondare il frigo! 🥲",
-        "Muscle Gain": "Ok massa… ma così ti esplodono i bicipiti e il fegato 💪🍕",
-        "Endurance Training": "Stai preparando la maratona o un buffet all you can eat? 🏃‍♂️🍩",
-        "Ketogenic Diet": "Zio, è la *keto*, non il *cheat day* 😵🥓"
-    }
-
-    # Aggiungiamo un flag nel log per immortalare l’evento 😅
-    st.session_state.daily_data["🔥_overlimit"] = {
-        "status": True,
-        "calories": total_calories,
-        "message": goal_messages.get(goal, "Stai esagerando FRA!")
-    }
-    update_daily_data(st.session_state.daily_data, st.session_state.sha)
-
-    # Visual effect senza GIF
-    st.markdown(
-        f"""
-        <div style='text-align: center; padding: 20px; border: 5px dashed red; border-radius: 20px; background-color: #fff3f3;'>
-            <h1 style='color: red; font-size: 60px; animation: blinker 1s linear infinite;'>💥 STAI SGRAVANDO FRA 💥</h1>
-            <h2 style='color: orange; font-size: 26px;'>{goal_messages.get(goal)}</h2>
-        </div>
-        <style>
-            @keyframes blinker {{
-                50% {{ opacity: 0; }}
-            }}
-        </style>
-        """,
-        unsafe_allow_html=True
-    )
 
