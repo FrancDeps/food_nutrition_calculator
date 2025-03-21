@@ -1,0 +1,22 @@
+{
+    "beef": {
+        "quantity": 100
+    },
+    "eggs": {
+        "quantity": 100
+    },
+    "pasta": {
+        "quantity": 100
+    },
+    "grana": {
+        "quantity": 100
+    },
+    "\ud83d\udd25_overlimit": {
+        "status": true,
+        "calories": 8486.5,
+        "message": "Zio\u2026 dovevi perdere peso, non sfondare il frigo! \ud83e\udd72"
+    },
+    "butter": {
+        "quantity": 1000
+    }
+}
