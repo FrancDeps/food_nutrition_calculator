@@ -18,5 +18,8 @@
     },
     "bread": {
         "quantity": 65
+    },
+    "fresh cheese": {
+        "quantity": 45
     }
 }
