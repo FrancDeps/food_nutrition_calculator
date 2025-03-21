@@ -18,6 +18,30 @@
         "Fats": 15
     },
     {
+        "name": "marmelade",
+        "Proteins": 0,
+        "Carbohydrates": 32,
+        "Fats": 0
+    },
+    {
+        "name": "fresh cheese",
+        "Proteins": 11,
+        "Carbohydrates": 2,
+        "Fats": 10
+    },
+    {
+        "name": "medium-aged cheese",
+        "Proteins": 23,
+        "Carbohydrates": 1,
+        "Fats": 25
+    },
+    {
+        "name": "hard cheese",
+        "Proteins": 33,
+        "Carbohydrates": 1,
+        "Fats": 31
+    },
+    {
         "name": "eggs",
         "Proteins": 13,
         "Carbohydrates": 1,
