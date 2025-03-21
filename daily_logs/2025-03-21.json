@@ -21,5 +21,8 @@
     },
     "fresh cheese": {
         "quantity": 45
+    },
+    "butter": {
+        "quantity": 100
     }
 }
