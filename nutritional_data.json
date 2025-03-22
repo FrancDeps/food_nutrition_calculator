@@ -12,6 +12,12 @@
         "Fats": 1
     },
     {
+        "name": "olive oil",
+        "Carbohydrates": 0,
+        "Proteins": 0,
+        "Fats": 100
+    }
+    {
         "name": "brioches",
         "Proteins": 6,
         "Carbohydrates": 37,
