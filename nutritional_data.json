@@ -12,6 +12,30 @@
         "Fats": 1
     },
     {
+        "name": "brioches",
+        "Proteins": 6,
+        "Carbohydrates": 37,
+        "Fats": 18
+    },
+    {
+        "name": "brioches marmelade",
+        "Proteins": 5,
+        "Carbohydrates": 47,
+        "Fats": 18
+    },
+    {
+        "name": "chocolate brioches",
+        "Proteins": 7,
+        "Carbohydrates": 43,
+        "Fats": 23
+    },
+    {
+        "name": "pain au chocolat",
+        "Proteins": 5,
+        "Carbohydrates": 40,
+        "Fats": 22
+    },
+    {
         "name": "beef",
         "Proteins": 26,
         "Carbohydrates": 0,
