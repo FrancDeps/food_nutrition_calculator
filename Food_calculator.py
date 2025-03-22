@@ -3,6 +3,7 @@ import requests
 import json
 import base64 #base64  is used to convert JSON data to a format compatible with the GitHub API; API only accepts base64 encoded content, so every time I save or update a file, the content is transformed from text to base64.
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 # GitHub Configuration
 GITHUB_TOKEN1 = "ghp_tKJMlnBlpxtk75K"
