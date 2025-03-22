@@ -1,8 +1,7 @@
 import streamlit as st 
 import requests
 import json
-import base64
-import matplotlib.pyplot as plt
+import base64 #base64  is used to convert JSON data to a format compatible with the GitHub API; API only accepts base64 encoded content, so every time I save or update a file, the content is transformed from text to base64.
 from datetime import datetime
 
 # GitHub Configuration
@@ -19,11 +18,11 @@ GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_F
 def load_food_database():
     try:
         with open("nutritional_data.json", "r") as file: #as file: dichiarazione del oggetto (file)
-            food_list = json.load(file) #legge e tutto il file lo carica nella variabile food list
-            return {item["name"]: item for item in food_list}  # ritorna e lo converte in dizionario, del tipo "pollo" => {grassi,proteine,carboidrati}
+            food_list = json.load(file) #reads the entire file loads it into the food_list variable
+            return {item["name"]: item for item in food_list}  # return and converts it into a dictionary, like "chicken" => {fats,proteins,carbs}
     except FileNotFoundError:
         st.error("❌ Error: `nutritional_data.json` not found. Make sure the file is in the project folder.")
-        return {} #assegan il valore alla funzione
+        return {} #assegna il valore alla funzione
 
 food_database = load_food_database() #salvare la lista degli alimenti sotto il nome food_database, 
 
@@ -32,10 +31,10 @@ def load_daily_data():
     headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"} #per instaurare una connessione con API di github dal mio codice che ci permettera di lavorare su GIthub
     response = requests.get(GITHUB_API_URL, headers=headers)
 
-    if response.status_code == 200: #se la richeista va a buon fine, compie l'operazione
+    if response.status_code == 200: # checking that response.status_code is equal to 200 to ensure that the request to GitHub was successful.
         data = response.json()
         decoded_content = base64.b64decode(data["content"]).decode("utf-8") # è un decoding
-        return json.loads(decoded_content), data["sha"]
+        return json.loads(decoded_content), data["sha"] #returns sha ensures that 
     else:
         return {}, None #altrimenti da NONE. 
 
@@ -63,7 +62,7 @@ if "daily_data" not in st.session_state: #se non è caricata nei dati di questa 
 st.title(" Daily Nutrition Tracker")
 
 # Select gender and activity level
-gender = st.radio("Select your gender:", ["Male", "Female"]) #tipo di bottone (uomo, donna, trans)
+gender = st.radio("Select your gender:", ["Male", "Female"]) #tipo di bottone (uomo, donna)
 activity_level = st.selectbox("Select your activity level:", ["Sedentary", "Moderately Active", "Very Active"]) #menu a tendina
 
 #  Select goal
