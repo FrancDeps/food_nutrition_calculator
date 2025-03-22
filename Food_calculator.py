@@ -170,7 +170,7 @@ macronutrient_totals = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
 
 for food, info in st.session_state.daily_data.items():
     if food in food_database:
-        quantity = info["quantity"] / 100 #normalizzazione
+        quantity = info["quantity"] / 100 #Normalize the quantity based on the values ​​per 100g
         for macro in macronutrient_totals:
             macronutrient_totals[macro] += food_database[food][macro] * quantity #Per ogni macronutriente (Carboidrati, Proteine, Grassi), prende il valore per 100g dal database e lo moltiplica per quantity per ottenere i grammi effettivi consumati.
 
@@ -190,7 +190,7 @@ else:
     st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
 
 # 📌 Compare macronutrient intake with target range based on goal
-st.header(f"📈 Macronutrient Comparison for **{goal}**")
+st.header(f"📈 Macronutrient Comparison for **{goal}**") #accordinf to the selected goal the user will see (Weight Loss,Muscle Gain,Endurance Training or Ketogenic Diet)
 
 macronutrient_ranges = {
     "Weight Loss": {"Carbohydrates": (20, 40), "Proteins": (30, 40), "Fats": (30, 40)},
