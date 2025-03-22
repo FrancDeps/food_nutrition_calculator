@@ -62,14 +62,14 @@ if "daily_data" not in st.session_state: #se non è caricata nei dati di questa 
 # Streamlit Interface
 st.title(" Daily Nutrition Tracker")
 
-# 📌 Select gender and activity level
+# Select gender and activity level
 gender = st.radio("Select your gender:", ["Male", "Female"]) #tipo di bottone (uomo, donna, trans)
 activity_level = st.selectbox("Select your activity level:", ["Sedentary", "Moderately Active", "Very Active"]) #menu a tendina
 
-# 📌 Select goal
+#  Select goal
 goal = st.selectbox("What is your goal?", ["Weight Loss", "Muscle Gain", "Endurance Training", "Ketogenic Diet"])
 
-# 📌 Input to add food item
+#  Input to add food item
 food_item = st.text_input("Enter food name (e.g., rice, apple, chicken):").lower() #.lower = lower case, tutte le maiuscole diventano minuscole, 
 quantity = st.number_input("Enter quantity in grams:", min_value=1, value=100)
 
@@ -85,7 +85,7 @@ if st.button("Add Food"):
     else:
         st.error("⚠️ Food not found in the database. Please check the spelling.") #se non c'è mi ritorna questo erroe con questo segnale
 
-# 📊 Display daily food log
+#  Display daily food log
 st.header(f"📅 Daily Nutrition Data for {TODAY_DATE}")
 
 if st.session_state.daily_data:
@@ -101,7 +101,7 @@ if st.session_state.daily_data:
 else:
     st.info("No food recorded today.")
 
-# 📊 Calculate Macronutrient Distribution & Total Calories
+#Calculate Macronutrient Distribution & Total Calories
 macronutrient_totals = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0} #partenza da 0 dei macro 
 total_calories = 0  
 
@@ -124,7 +124,7 @@ total_calories = (
 st.header("🔥 Total Calories Consumed Today")
 st.subheader(f"**{total_calories:.0f} kcal**") #per far funzionare la funzione all interno della stringa venga visulizzato il totale dell calorie
 
-# 📌 Compare total calorie intake with recommended daily intake
+#Compare total calorie intake with recommended daily intake
 caloric_needs = {
     "Male": {"Sedentary": 1900, "Moderately Active": 2300, "Very Active": 2800},
     "Female": {"Sedentary": 1500, "Moderately Active": 1900, "Very Active": 2400}
@@ -165,7 +165,7 @@ elif total_calories > recommended_calories:
 else:
     st.success("✅ Your calorie intake matches your estimated needs!")
 
-# 📊 Calculate Macronutrient Distribution
+#Calculate Macronutrient Distribution
 macronutrient_totals = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
 
 for food, info in st.session_state.daily_data.items():
@@ -175,32 +175,32 @@ for food, info in st.session_state.daily_data.items():
             macronutrient_totals[macro] += food_database[food][macro] * quantity #Per ogni macronutriente (Carboidrati, Proteine, Grassi), prende il valore per 100g dal database e lo moltiplica per quantity per ottenere i grammi effettivi consumati.
 
 macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
-total_macros = sum(macronutrient_totals.values())
+total_macros = sum(macronutrient_totals.values()) #it is the sum of grams of carbohydrates + proteins + fats
 if total_macros > 0:
-    macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
+    macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()} #if macro >0, it calculates the macronutrient percentage accordingly, it is rounded to the first decimal number, v is the quantity of the macro and k is the macro name
 
     st.header("📊 Macronutrient Distribution")
 
     fig, ax = plt.subplots()
-    ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%',
+    ax.pie(macronutrient_percentages.values(), labels=macronutrient_percentages.keys(), autopct='%1.1f%%', #autopct='%1.1f%%' shows the percentage while startangle=90 ensure simmtry in the graph, otherwise it starts from right. 
            startangle=90)
     ax.axis("equal")
     st.pyplot(fig)
 else:
     st.warning("⚠️ No food added yet. Please enter food items to see macronutrient distribution.")
 
-# 📌 Compare macronutrient intake with target range based on goal
+#Compare macronutrient intake with target range based on goal
 st.header(f"📈 Macronutrient Comparison for **{goal}**") #accordinf to the selected goal the user will see (Weight Loss,Muscle Gain,Endurance Training or Ketogenic Diet)
 
-macronutrient_ranges = {
+macronutrient_ranges = {    #optimal range for each objective, expressed in percentage terms
     "Weight Loss": {"Carbohydrates": (20, 40), "Proteins": (30, 40), "Fats": (30, 40)},
     "Muscle Gain": {"Carbohydrates": (45, 55), "Proteins": (20, 30), "Fats": (20, 30)},
     "Endurance Training": {"Carbohydrates": (55, 65), "Proteins": (15, 20), "Fats": (20, 25)},
     "Ketogenic Diet": {"Carbohydrates": (5, 10), "Proteins": (20, 25), "Fats": (65, 75)}
 }
 
-for macro, percent in macronutrient_percentages.items():
-    min_range, max_range = macronutrient_ranges[goal][macro]
+for macro, percent in macronutrient_percentages.items(): #Scrolls through all the macronutrients in the dictionary macronutrient_percentages for each macro it takes the name of the macronutrient and the actual % consumed
+    min_range, max_range = macronutrient_ranges[goal][macro] #Collect from the macronutrient ranges dictionary the minimum and maximum recommended values ​​for that macronutrient and for the selected goal
     if percent < min_range:
         st.warning(
             f"⚠️ **{macro}** intake **{percent}%**: Too LOW compared to the target range **{min_range}-{max_range}%**.")
