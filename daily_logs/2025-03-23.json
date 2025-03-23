@@ -13,8 +13,5 @@
     },
     "eggs": {
         "quantity": 55
-    },
-    "butter": {
-        "quantity": 1000
     }
 }
