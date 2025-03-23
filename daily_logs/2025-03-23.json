@@ -4,5 +4,8 @@
     },
     "rice": {
         "quantity": 85
+    },
+    "bread": {
+        "quantity": 75
     }
 }
