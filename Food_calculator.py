@@ -22,14 +22,14 @@ def load_food_database():
             food_list = json.load(file) #reads the entire file loads it into the food_list variable
             return {item["name"]: item for item in food_list}  # return and converts it into a dictionary, like "chicken" => {fats,proteins,carbs}
     except FileNotFoundError:
-        st.error("❌ Error: `nutritional_data.json` not found. Make sure the file is in the project folder.")
-        return {} #assegna il valore alla funzione
+        st.error(" Error: `nutritional_data.json` not found. Make sure the file is in the project folder.")
+        return {} #assign value to function
 
 food_database = load_food_database() #save the food list under the name food_database, 
 
 # Load daily data from GitHub
 def load_daily_data():
-    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"} #per instaurare una connessione con API di github dal mio codice che ci permettera di lavorare su GIthub
+    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"} #to establish a connection with github API from my code that will allow us to work on GIthub
     response = requests.get(GITHUB_API_URL, headers=headers)
 
     if response.status_code == 200: # checking that response.status_code is equal to 200 to ensure that the request to GitHub was successful.
@@ -41,11 +41,11 @@ def load_daily_data():
 
 # Update daily data on GitHub
 def update_daily_data(new_data, sha):    #funzione che si occupa di aggiornare il file di oggi 
-    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}  #identico a quello sopra, per instaurare connesione con API
+    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}  #identical to the one above, to establish connection with API
     json_data = json.dumps(new_data, indent=4) #salva in formato json gli alimenti consumati durante la giornata
     encoded_data = base64.b64encode(json_data.encode("utf-8")).decode("utf-8")
 
-    payload = {    #contenuto che viene inviato a github
+    payload = {    #content that is pushed to github
         "message": f"Updated daily log {TODAY_DATE}",
         "content": encoded_data,
         "sha": sha if sha else ""
@@ -90,7 +90,7 @@ st.header(f"📅 Daily Nutrition Data for {TODAY_DATE}")
 
 if st.session_state.daily_data:
     for food, info in list(st.session_state.daily_data.items()): #per ogni cibo salvato oggi lui crea due colonne 1, c'è il nome del cibo e in colonna 2 il bottone per rimuovere l'item
-        col1, col2 = st.columns([4, 1]) #proporzione delle colonne 80% colonna 1 e 20% colonna 2
+        col1, col2 = st.columns([4, 1]) #proportion between columns: 80% col 1 e 20% col 2
         with col1:
             st.write(f"**{food.capitalize()}**: {info.get('quantity', 0)}g") #
         with col2:
@@ -105,7 +105,7 @@ else:
 macronutrient_totals = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0} #partenza da 0 dei macro 
 total_calories = 0  
 
-for food, info in st.session_state.daily_data.items():  #somma totale C P G di tutti gli ingredienti
+for food, info in st.session_state.daily_data.items():  #somma totale C P F di tutti gli ingredienti
     if food in food_database:
         quantity = info["quantity"] / 100  
 
