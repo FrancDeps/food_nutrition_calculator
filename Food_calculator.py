@@ -25,7 +25,7 @@ def load_food_database():
         st.error("❌ Error: `nutritional_data.json` not found. Make sure the file is in the project folder.")
         return {} #assegna il valore alla funzione
 
-food_database = load_food_database() #salvare la lista degli alimenti sotto il nome food_database, 
+food_database = load_food_database() #save the food list under the name food_database, 
 
 # Load daily data from GitHub
 def load_daily_data():
@@ -34,8 +34,8 @@ def load_daily_data():
 
     if response.status_code == 200: # checking that response.status_code is equal to 200 to ensure that the request to GitHub was successful.
         data = response.json()
-        decoded_content = base64.b64decode(data["content"]).decode("utf-8") # è un decoding
-        return json.loads(decoded_content), data["sha"] #returns sha ensures that 
+        decoded_content = base64.b64decode(data["content"]).decode("utf-8") #base64 is decoding transforming from string to binary data (bytes), while decode("utf-8") converts bytess into a readable string. 
+        return json.loads(decoded_content), data["sha"] #Sha: algorithm that takes data and generates a unique alphanumeric string uniquely represents that content
     else:
         return {}, None #altrimenti da NONE. 
 
@@ -90,7 +90,7 @@ st.header(f"📅 Daily Nutrition Data for {TODAY_DATE}")
 
 if st.session_state.daily_data:
     for food, info in list(st.session_state.daily_data.items()): #per ogni cibo salvato oggi lui crea due colonne 1, c'è il nome del cibo e in colonna 2 il bottone per rimuovere l'item
-        col1, col2 = st.columns([4, 1]) #proporzione delle colonne 80% colonna 1 e 20% collona 2
+        col1, col2 = st.columns([4, 1]) #proporzione delle colonne 80% colonna 1 e 20% colonna 2
         with col1:
             st.write(f"**{food.capitalize()}**: {info.get('quantity', 0)}g") #
         with col2:
