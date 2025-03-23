@@ -15,7 +15,7 @@ TODAY_DATE = datetime.today().strftime("%Y-%m-%d") #takes the current date with 
 GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json" #path that makes the directory, first GITHUB_FOLDER then TODAY_DATE (how it finds the name of today's file)
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}" #URL string that points to a specific file in a GitHub repository, using the GitHub API. 
 
-# Load Food Database from JSON File
+# Load Food Database from Json File
 def load_food_database():
     try:
         with open("nutritional_data.json", "r") as file: #as file: dichiarazione del oggetto (file)
@@ -34,15 +34,15 @@ def load_daily_data():
 
     if response.status_code == 200: # checking that response.status_code is equal to 200 to ensure that the request to GitHub was successful.
         data = response.json()
-        decoded_content = base64.b64decode(data["content"]).decode("utf-8") #base64 is decoding transforming from string to binary data (bytes), while decode("utf-8") converts bytess into a readable string. 
+        decoded_content = base64.b64decode(data["content"]).decode("utf-8") #base64 is decoding transforming from string to binary data (bytes), while decode("utf-8") converts bytes into a readable string. 
         return json.loads(decoded_content), data["sha"] #Sha: algorithm that takes data and generates a unique alphanumeric string uniquely represents that content
     else:
         return {}, None #altrimenti da NONE. 
 
 # Update daily data on GitHub
-def update_daily_data(new_data, sha):    #funzione che si occupa di aggiornare il file di oggi 
+def update_daily_data(new_data, sha):    #function that updates today's file
     headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}  #identical to the one above, to establish connection with API
-    json_data = json.dumps(new_data, indent=4) #salva in formato json gli alimenti consumati durante la giornata
+    json_data = json.dumps(new_data, indent=4) #saves the foods consumed during the day in json format
     encoded_data = base64.b64encode(json_data.encode("utf-8")).decode("utf-8")
 
     payload = {    #content that is pushed to github
