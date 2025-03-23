@@ -10,5 +10,8 @@
     },
     "peanut butter": {
         "quantity": 24
+    },
+    "eggs": {
+        "quantity": 55
     }
 }
