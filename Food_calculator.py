@@ -51,8 +51,8 @@ def update_daily_data(new_data, sha):    #function that updates today's file wit
         "sha": sha if sha else ""
     }
 
-    response = requests.put(GITHUB_API_URL, headers=headers, json=payload)  #invia il payload con i dati aggiornati e aspetta la risposta da github
-    if response.status_code in [200, 201]: #controlla che ci sia una risposta positiva
+    response = requests.put(GITHUB_API_URL, headers=headers, json=payload)  #Makes a PUT request to the GitHub API to update or create a file
+    if response.status_code in [200, 201]: #check that there is a positive response
         st.success("✅ File successfully updated on GitHub!")
 
 # Initialize session state #serve per salvare dati tra i vari aggiornamenti della pagina se la ricarichiamo
