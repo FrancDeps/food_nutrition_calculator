@@ -336,6 +336,12 @@
         "Fats": 0.1
     },
     {
+        "name": "gorgonzola",
+        "Proteins": 18,
+        "Carbohydrates": 0.5,
+        "Fats": 28
+    },
+    {
         "name": "apples",
         "Proteins": 0.3,
         "Carbohydrates": 14,
