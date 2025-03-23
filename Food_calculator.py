@@ -12,7 +12,7 @@ GITHUB_TOKEN = GITHUB_TOKEN1 + GITHUB_TOKEN2 #token è il codice segreto di gith
 GITHUB_REPO = "FrancDeps/food_nutrition_calculator" 
 GITHUB_FOLDER = "daily_logs" #cartella dove salvo i dati giornalieri
 TODAY_DATE = datetime.today().strftime("%Y-%m-%d") #prende la data attuale con il formato year month day. 
-GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json" #percorso che fa la data, directory, deve trovare il nome del file di oggi.
+GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json" #path that makes the directory, first GITHUB_FOLDER then TODAY_DATE (how it finds the name of today's file)
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}" #creazioni di nuovi file li può fare con api, usato per modificare i file giornlaieri. 
 
 # Load Food Database from JSON File
