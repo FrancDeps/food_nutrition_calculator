@@ -10,7 +10,7 @@ GITHUB_TOKEN1 = "ghp_tKJMlnBlpxtk75K"
 GITHUB_TOKEN2 = "bmWQNjJTIW40HeV1jGcrg"
 GITHUB_TOKEN = GITHUB_TOKEN1 + GITHUB_TOKEN2 #unique access key used to authenticate my identity when interacting with the GitHub API or performing operations from external apps
 GITHUB_REPO = "FrancDeps/food_nutrition_calculator" 
-GITHUB_FOLDER = "daily_logs" #cartella dove salvo i dati giornalieri
+GITHUB_FOLDER = "daily_logs" #folder where I save daily data
 TODAY_DATE = datetime.today().strftime("%Y-%m-%d") #takes the current date with the format yyyy-mm-dd
 GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json" #path that makes the directory, first GITHUB_FOLDER then TODAY_DATE (how it finds the name of today's file)
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}" #URL string that points to a specific file in a GitHub repository, using the GitHub API. 
@@ -40,9 +40,9 @@ def load_daily_data():
         return {}, None #altrimenti da NONE. 
 
 # Update daily data on GitHub
-def update_daily_data(new_data, sha):    #function that updates today's file
-    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}  #identical to the one above, to establish connection with API
-    json_data = json.dumps(new_data, indent=4) #saves the foods consumed during the day in json format
+def update_daily_data(new_data, sha):    #function that updates today's file with input the new food added today and sha (the file identifier on GitHub, used to update an existing file; if it is empty, it creates a new file)
+    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}  #identical to the one above, autentication to establish connection with Github API
+    json_data = json.dumps(new_data, indent=4) #saves the foods added during the day in json format
     encoded_data = base64.b64encode(json_data.encode("utf-8")).decode("utf-8")
 
     payload = {    #content that is pushed to github
