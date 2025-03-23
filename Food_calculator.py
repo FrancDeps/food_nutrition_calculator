@@ -8,12 +8,12 @@ import matplotlib.pyplot as plt
 # GitHub Configuration
 GITHUB_TOKEN1 = "ghp_tKJMlnBlpxtk75K"
 GITHUB_TOKEN2 = "bmWQNjJTIW40HeV1jGcrg"
-GITHUB_TOKEN = GITHUB_TOKEN1 + GITHUB_TOKEN2 #token è il codice segreto di github che mi permette di lavorare con github
+GITHUB_TOKEN = GITHUB_TOKEN1 + GITHUB_TOKEN2 #unique access key used to authenticate my identity when interacting with the GitHub API or performing operations from external apps
 GITHUB_REPO = "FrancDeps/food_nutrition_calculator" 
 GITHUB_FOLDER = "daily_logs" #cartella dove salvo i dati giornalieri
-TODAY_DATE = datetime.today().strftime("%Y-%m-%d") #prende la data attuale con il formato year month day. 
+TODAY_DATE = datetime.today().strftime("%Y-%m-%d") #takes the current date with the format yyyy-mm-dd
 GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json" #path that makes the directory, first GITHUB_FOLDER then TODAY_DATE (how it finds the name of today's file)
-GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}" #creazioni di nuovi file li può fare con api, usato per modificare i file giornlaieri. 
+GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}" #URL string that points to a specific file in a GitHub repository, using the GitHub API. 
 
 # Load Food Database from JSON File
 def load_food_database():
