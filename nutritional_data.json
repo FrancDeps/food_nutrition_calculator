@@ -613,9 +613,9 @@
     },
     {
         "name": "hamburger",
-        "Proteins": 17,
-        "Carbohydrates": 24,
-        "Fats": 14
+        "Proteins": 25,
+        "Carbohydrates": 0,
+        "Fats": 18
     },
     {
         "name": "pizza",
