@@ -16,9 +16,17 @@ GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json" #path that makes the dir
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}" #URL string that points to a specific file in a GitHub repository, using the GitHub API. 
 
 # Load Github Token 
-def load_github_token()
+def load_api_token():
     try:
-        with open("
+        with open("token.json", "r") as file:
+            data = json.load(file)
+            return data["token"]
+    except FileNotFoundError:
+        st.error("Error: `token.json` not found.")
+        return None
+    except KeyError:
+        st.error("Error: `token` not found in the JSON file.")
+        return None
 
 # Load Food Database from Json File
 def load_food_database():
