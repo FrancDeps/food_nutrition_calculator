@@ -197,33 +197,33 @@ for macro, percent in macronutrient_percentages.items():
 #Funny personalized warning for extreme intake
 if total_calories > 4000:
     # Messaggi personalizzati per ciascun obiettivo
- goal_messages = {
+ # Definito una volta sola all’inizio
+goal_messages = {
     "Weight Loss": "Zio… dovevi perdere peso, non sfondare il frigo! 🥲",
     "Muscle Gain": "Ok massa… ma così ti esplodono i bicipiti e il fegato 💪🍕",
     "Endurance Training": "Stai preparando la maratona o un buffet all you can eat? 🏃‍♂️🍩",
     "Ketogenic Diet": "Zio, è la *keto*, non il *cheat day* 😵🥓"
 }
 
-# Rimuoviamo il salvataggio del flag "🔥_overlimit" nel dizionario daily_data
-# Lasciamo solo il visual effect e l’update
+# Poi il tuo if
+if total_calories > calorie_limit:
+    update_daily_data(st.session_state.daily_data, st.session_state.sha)
 
-update_daily_data(st.session_state.daily_data, st.session_state.sha)
+    st.markdown(
+        f"""
+        <div style='text-align: center; padding: 20px; border: 5px dashed red; border-radius: 20px; background-color: #fff3f3;'>
+            <h1 style='color: red; font-size: 60px; animation: blinker 1s linear infinite;'>💥 STAI SGRAVANDO FRA 💥</h1>
+            <h2 style='color: orange; font-size: 26px;'>{goal_messages.get(goal)}</h2>
+        </div>
+        <style>
+            @keyframes blinker {{
+                50% {{ opacity: 0; }}
+            }}
+        </style>
+        """,
+        unsafe_allow_html=True
+    )
 
-# Visual effect senza GIF
-st.markdown(
-    f"""
-    <div style='text-align: center; padding: 20px; border: 5px dashed red; border-radius: 20px; background-color: #fff3f3;'>
-        <h1 style='color: red; font-size: 60px; animation: blinker 1s linear infinite;'>💥 STAI SGRAVANDO FRA 💥</h1>
-        <h2 style='color: orange; font-size: 26px;'>{goal_messages.get(goal)}</h2>
-    </div>
-    <style>
-        @keyframes blinker {{
-            50% {{ opacity: 0; }}
-        }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
 
 
 
