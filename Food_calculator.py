@@ -6,9 +6,6 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 # GitHub Configuration
-GITHUB_TOKEN1 = "ghp_tKJMlnBlpxtk75K"
-GITHUB_TOKEN2 = "bmWQNjJTIW40HeV1jGcrg"
-GITHUB_TOKEN = GITHUB_TOKEN1 + GITHUB_TOKEN2 #unique access key used to authenticate my identity when interacting with the GitHub API or performing operations from external apps
 GITHUB_REPO = "FrancDeps/food_nutrition_calculator" 
 GITHUB_FOLDER = "daily_logs" #folder where I save daily data
 TODAY_DATE = datetime.today().strftime("%Y-%m-%d") #takes the current date with the format yyyy-mm-dd
