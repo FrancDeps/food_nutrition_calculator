@@ -197,7 +197,7 @@ for macro, percent in macronutrient_percentages.items():
 #Funny personalized warning for extreme intake
 if total_calories > 4000:
     # Messaggi personalizzati per ciascun obiettivo
-goal_messages = {
+ goal_messages = {
     "Weight Loss": "Zio… dovevi perdere peso, non sfondare il frigo! 🥲",
     "Muscle Gain": "Ok massa… ma così ti esplodono i bicipiti e il fegato 💪🍕",
     "Endurance Training": "Stai preparando la maratona o un buffet all you can eat? 🏃‍♂️🍩",
