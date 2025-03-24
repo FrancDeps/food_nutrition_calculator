@@ -194,7 +194,7 @@ for macro, percent in macronutrient_percentages.items():
     else:
         st.success(f"✅ **{macro}** intake **{percent}%**: **WITHIN** the target range **{min_range}-{max_range}%**.")
 
-#Funny personalized warning for extreme intake
+# Funny personalized warning for extreme intake
 if total_calories > 4000:
     # Messaggi personalizzati per ciascun obiettivo
     goal_messages = {
@@ -204,12 +204,7 @@ if total_calories > 4000:
         "Ketogenic Diet": "Zio, è la *keto*, non il *cheat day* 😵🥓"
     }
 
-    # Aggiungiamo un flag nel log per immortalare l’evento 
-    st.session_state.daily_data["🔥_overlimit"] = {
-        "status": True,
-        "calories": total_calories,
-        "message": goal_messages.get(goal, "Stai esagerando FRA!")
-    }
+    # Rimosso il flag "🔥_overlimit" dal daily_data
     update_daily_data(st.session_state.daily_data, st.session_state.sha)
 
     # Visual effect senza GIF
@@ -227,4 +222,3 @@ if total_calories > 4000:
         """,
         unsafe_allow_html=True
     )
-
