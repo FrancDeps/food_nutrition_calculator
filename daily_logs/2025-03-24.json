@@ -1,5 +1,8 @@
 {
     "peanut butter": {
         "quantity": 15
+    },
+    "bread": {
+        "quantity": 70
     }
 }
