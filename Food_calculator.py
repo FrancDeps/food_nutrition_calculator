@@ -39,7 +39,7 @@ food_database = load_food_database() #save the food list under the name food_dat
 
 # Load daily data from GitHub
 def load_daily_data():
-    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"} #to establish a connection with github API from my code that will allow us to work on GIthub
+    headers = {"Authorization": f"Bearer {token}"} #to establish a connection with github API from my code that will allow us to work on GIthub
     response = requests.get(GITHUB_API_URL, headers=headers)
 
     if response.status_code == 200: # checking that response.status_code is equal to 200 to ensure that the request to GitHub was successful.
@@ -51,7 +51,7 @@ def load_daily_data():
 
 # Update daily data on GitHub
 def update_daily_data(new_data, sha):    #function that updates today's file with input the new food added today and sha (the file identifier on GitHub, used to update an existing file; if it is empty, it creates a new file)
-    headers = {"Authorization": f"Bearer {GITHUB_TOKEN}"}  #identical to the one above, autentication to establish connection with Github API
+    headers = {"Authorization": f"Bearer {token}"}  #identical to the one above, autentication to establish connection with Github API
     json_data = json.dumps(new_data, indent=4) #saves the foods added during the day in json format
     encoded_data = base64.b64encode(json_data.encode("utf-8")).decode("utf-8")
 
