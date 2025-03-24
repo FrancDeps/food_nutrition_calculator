@@ -1,5 +1,5 @@
 import streamlit as st 
-import requests
+import requests # for requiring http
 import json
 import base64 #base64  is used to convert JSON data to a format compatible with the GitHub API; API only accepts base64 encoded content, so every time I save or update a file, the content is transformed from text to base64.
 from datetime import datetime
