@@ -16,7 +16,6 @@ GITHUB_FILE_PATH = f"{GITHUB_FOLDER}/{TODAY_DATE}.json"
 GITHUB_API_URL = f"https://api.github.com/repos/{GITHUB_REPO}/contents/{GITHUB_FILE_PATH}"
 
 # Load Food Database from JSON File
-@st.cache_data
 def load_food_database():
     try:
         with open("nutritional_data.json", "r") as file:
@@ -153,7 +152,7 @@ for food, info in st.session_state.daily_data.items():
         for macro in macronutrient_totals:
             macronutrient_totals[macro] += food_database[food][macro] * quantity
 
-# **Ensure macronutrient_percentages is always defined**
+# Ensure macronutrient_percentages is always defined
 macronutrient_percentages = {"Carbohydrates": 0, "Proteins": 0, "Fats": 0}
 
 # Normalize to Percentage
@@ -161,7 +160,7 @@ total_macros = sum(macronutrient_totals.values())
 if total_macros > 0:
     macronutrient_percentages = {k: round((v / total_macros) * 100, 1) for k, v in macronutrient_totals.items()}
 
-    # 📊 Interactive Pie Chart of Macronutrient Distribution
+    #Interactive Pie Chart of Macronutrient Distribution
     st.header("📊 Macronutrient Distribution")
 
     fig, ax = plt.subplots()
@@ -204,7 +203,7 @@ if total_calories > 4000:
         "Ketogenic Diet": "Zio, è la *keto*, non il *cheat day* 😵🥓"
     }
 
-    # Rimosso il flag "🔥_overlimit" dal daily_data
+
     update_daily_data(st.session_state.daily_data, st.session_state.sha)
 
     # Visual effect senza GIF
