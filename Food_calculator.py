@@ -202,16 +202,7 @@ if total_calories > 4000:
         "Muscle Gain": "Ok massa… ma così ti esplodono i bicipiti e il fegato 💪🍕",
         "Endurance Training": "Stai preparando la maratona o un buffet all you can eat? 🏃‍♂️🍩",
         "Ketogenic Diet": "Zio, è la *keto*, non il *cheat day* 😵🥓"
-    }
-
-    # Aggiungiamo un flag nel log per immortalare l’evento 
-    st.session_state.daily_data["🔥_overlimit"] = {
-        "status": True,
-        "calories": total_calories,
-        "message": goal_messages.get(goal, "Stai esagerando FRA!")
-    }
-    update_daily_data(st.session_state.daily_data, st.session_state.sha)
-
+  
     # Visual effect senza GIF
     st.markdown(
         f"""
